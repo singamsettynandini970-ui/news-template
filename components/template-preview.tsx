@@ -1,5 +1,7 @@
 "use client"
 
+import React from "react"
+
 import { useState, useEffect } from "react"
 import {
   Sparkles,
@@ -8,6 +10,7 @@ import {
   Search,
   ShoppingCart,
   User,
+  Users,
   Menu,
   ChevronDown,
   ChevronRight,
@@ -37,11 +40,19 @@ import {
   AlertCircle,
   Accessibility,
   Expand,
+  Star,
+  Zap,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { NewsTemplateLanding } from "./news-template-landing"
 import type { ExtendedPanel } from "@/lib/template-registry"
 import { TEMPLATE_REGISTRY } from "@/lib/template-data"
+import MediaGalleryPreview from "./previews/media-gallery-preview"
+import NewsContentPreview from "./previews/news-content-preview"
+import EcommercePreview from "./previews/ecommerce-preview"
+import SocialEngagementPreview from "./previews/social-engagement-preview"
+import BusinessCorporatePreview from "./previews/business-corporate-preview"
+import MarketingPromotionsPreview from "./previews/marketing-promotions-preview"
 
 interface TemplatePreviewProps {
   selectedItem: string | null
@@ -2359,6 +2370,517 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     )
   }
 
+  // Image Slider Variations
+  // Variation 1: Classic Dot Navigation Slider
+  const ImageSliderClassicPreview = () => {
+    const [current, setCurrent] = useState(0)
+    const slides = [
+      { bg: 'from-rose-400 to-orange-300', title: 'Summer Collection', subtitle: 'Explore new arrivals' },
+      { bg: 'from-blue-400 to-cyan-300', title: 'Winter Sale', subtitle: 'Up to 50% off' },
+      { bg: 'from-emerald-400 to-teal-300', title: 'Spring Fashion', subtitle: 'Fresh styles' },
+      { bg: 'from-violet-400 to-purple-300', title: 'Autumn Vibes', subtitle: 'Cozy essentials' }
+    ]
+    return (
+      <div className="w-full max-w-2xl">
+        <div className={`relative h-56 bg-gradient-to-br ${slides[current].bg} rounded-2xl overflow-hidden shadow-xl`}>
+          <div className="absolute inset-0 flex items-center justify-center text-center text-white">
+            <div>
+              <h2 className="text-3xl font-black">{slides[current].title}</h2>
+              <p className="mt-2 text-white/80">{slides[current].subtitle}</p>
+            </div>
+          </div>
+          <button onClick={() => setCurrent(c => c > 0 ? c - 1 : slides.length - 1)} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 shadow-lg hover:bg-white transition-colors">
+            <ChevronLeft className="h-5 w-5 text-slate-700" />
+          </button>
+          <button onClick={() => setCurrent(c => c < slides.length - 1 ? c + 1 : 0)} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 shadow-lg hover:bg-white transition-colors">
+            <ChevronRight className="h-5 w-5 text-slate-700" />
+          </button>
+        </div>
+        <div className="mt-4 flex gap-2 justify-center">
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => setCurrent(i)} className={`h-2 transition-all rounded-full ${i === current ? 'w-8 bg-slate-800' : 'w-2 bg-slate-300 hover:bg-slate-400'}`} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Variation 2: Modern Fullwidth with Progress Bar
+  const ImageSliderModernPreview = () => {
+    const [active, setActive] = useState(0)
+    return (
+      <div className="w-full max-w-2xl">
+        <div className="relative h-64 bg-slate-900 rounded-3xl overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 via-blue-500/30 to-purple-500/30" />
+          <div className="absolute inset-0 flex items-center p-8">
+            <div className="max-w-md">
+              <span className="px-3 py-1 bg-white/20 rounded-full text-xs text-white font-bold">NEW</span>
+              <h2 className="mt-3 text-3xl font-black text-white">Modern Design System</h2>
+              <p className="mt-2 text-white/70">Create beautiful interfaces with our component library</p>
+              <button className="mt-4 px-6 py-2 bg-white text-slate-900 rounded-full font-bold hover:bg-slate-100 transition-colors">Explore</button>
+            </div>
+          </div>
+          <div className="absolute bottom-4 left-8 right-8">
+            <div className="flex gap-2">
+              {[0, 1, 2].map(i => (
+                <button key={i} onClick={() => setActive(i)} className={`flex-1 h-1 rounded-full transition-all ${i === active ? 'bg-white' : 'bg-white/30'}`} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Variation 3: Thumbnail Gallery Slider
+  const ImageSliderThumbnailPreview = () => {
+    const [selected, setSelected] = useState(0)
+    const images = ['from-amber-200 to-yellow-400', 'from-sky-200 to-blue-400', 'from-pink-200 to-rose-400', 'from-lime-200 to-green-400']
+    return (
+      <div className="w-full max-w-2xl bg-white p-4 rounded-2xl shadow-lg border border-slate-100">
+        <div className={`h-52 bg-gradient-to-br ${images[selected]} rounded-xl mb-4 flex items-center justify-center`}>
+          <span className="text-white/80 font-bold text-lg">Product Image {selected + 1}</span>
+        </div>
+        <div className="flex gap-3">
+          {images.map((img, i) => (
+            <button key={i} onClick={() => setSelected(i)} className={`flex-1 h-16 bg-gradient-to-br ${img} rounded-lg transition-all ${i === selected ? 'ring-2 ring-slate-900 ring-offset-2 scale-95' : 'opacity-60 hover:opacity-100'}`} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Variation 4: Autoplay with Timer Indicator
+  const ImageSliderAutoplayPreview = () => {
+    const [slide, setSlide] = useState(0)
+    useEffect(() => {
+      const timer = setInterval(() => setSlide(s => (s + 1) % 3), 3000)
+      return () => clearInterval(timer)
+    }, [])
+    const slides = [
+      { bg: 'from-indigo-600 to-violet-600', icon: '🚀', text: 'Launch Your Project' },
+      { bg: 'from-emerald-600 to-teal-600', icon: '📈', text: 'Grow Your Business' },
+      { bg: 'from-orange-600 to-red-600', icon: '🎯', text: 'Reach Your Goals' }
+    ]
+    return (
+      <div className="w-full max-w-2xl">
+        <div className={`relative h-52 bg-gradient-to-r ${slides[slide].bg} rounded-2xl overflow-hidden shadow-2xl transition-all duration-500`}>
+          <div className="absolute inset-0 flex items-center justify-center text-white">
+            <div className="text-center">
+              <span className="text-5xl">{slides[slide].icon}</span>
+              <h3 className="mt-3 text-2xl font-black">{slides[slide].text}</h3>
+            </div>
+          </div>
+          <div className="absolute top-4 right-4 flex items-center gap-2 bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-full">
+            <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-xs text-white font-medium">Auto-play</span>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/20">
+            <div className="h-full bg-white/80 animate-[progress_3s_linear_infinite]" style={{ width: '100%' }} />
+          </div>
+        </div>
+        <div className="mt-4 flex gap-2 justify-center">
+          {slides.map((_, i) => (
+            <div key={i} className={`h-1.5 w-12 rounded-full transition-all ${i === slide ? 'bg-slate-800' : 'bg-slate-200'}`} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Media Grid Variations
+  // Variation 1: Classic Equal Grid
+  const MediaGridClassicPreview = () => (
+    <div className="w-full max-w-2xl">
+      <div className="grid grid-cols-3 gap-3">
+        {['from-rose-300 to-pink-400', 'from-amber-300 to-orange-400', 'from-emerald-300 to-teal-400', 'from-sky-300 to-blue-400', 'from-violet-300 to-purple-400', 'from-slate-300 to-gray-400'].map((gradient, i) => (
+          <div key={i} className={`aspect-square bg-gradient-to-br ${gradient} rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all cursor-pointer`} />
+        ))}
+      </div>
+    </div>
+  )
+
+  // Variation 2: Pinterest-style Masonry
+  const MediaGridMasonryPreview = () => (
+    <div className="w-full max-w-2xl columns-3 gap-3">
+      {[
+        { h: 'h-48', color: 'from-pink-400 to-rose-500' },
+        { h: 'h-32', color: 'from-cyan-400 to-blue-500' },
+        { h: 'h-56', color: 'from-amber-400 to-orange-500' },
+        { h: 'h-40', color: 'from-emerald-400 to-teal-500' },
+        { h: 'h-52', color: 'from-violet-400 to-purple-500' },
+        { h: 'h-36', color: 'from-red-400 to-pink-500' }
+      ].map((item, i) => (
+        <div key={i} className={`${item.h} mb-3 break-inside-avoid bg-gradient-to-br ${item.color} rounded-2xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer`} />
+      ))}
+    </div>
+  )
+
+  // Variation 3: Filterable Gallery with Pills
+  const MediaGridFilterablePreview = () => {
+    const [filter, setFilter] = useState('all')
+    return (
+      <div className="w-full max-w-2xl">
+        <div className="flex gap-2 mb-4">
+          {['All', 'Photos', 'Videos', 'Art'].map(f => (
+            <button key={f} onClick={() => setFilter(f.toLowerCase())} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === f.toLowerCase() ? 'bg-slate-900 text-white shadow-lg' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{f}</button>
+          ))}
+        </div>
+        <div className="grid grid-cols-4 gap-2">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className={`aspect-square rounded-xl overflow-hidden ${i % 3 === 0 ? 'col-span-2 row-span-2' : ''}`}>
+              <div className={`w-full h-full bg-gradient-to-br ${['from-indigo-400 to-blue-500', 'from-pink-400 to-rose-500', 'from-emerald-400 to-cyan-500', 'from-amber-400 to-orange-500'][i % 4]} hover:scale-110 transition-transform`} />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Variation 4: Interactive Grid with Hover Details
+  const MediaGridInteractivePreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-3 gap-4">
+      {[
+        { title: 'Mountain View', likes: '2.4K', gradient: 'from-slate-700 to-slate-900' },
+        { title: 'Ocean Sunset', likes: '1.8K', gradient: 'from-orange-500 to-rose-600' },
+        { title: 'City Lights', likes: '3.1K', gradient: 'from-indigo-600 to-purple-700' },
+        { title: 'Forest Path', likes: '982', gradient: 'from-emerald-600 to-teal-700' },
+        { title: 'Desert Dunes', likes: '1.5K', gradient: 'from-amber-500 to-orange-600' },
+        { title: 'Northern Lights', likes: '4.2K', gradient: 'from-cyan-500 to-blue-600' }
+      ].map((item, i) => (
+        <div key={i} className="group relative aspect-square rounded-2xl overflow-hidden cursor-pointer shadow-lg">
+          <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient}`} />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-center">
+              <p className="font-bold">{item.title}</p>
+              <p className="text-sm text-white/80 flex items-center justify-center gap-1 mt-1">
+                <Heart className="h-3 w-3" /> {item.likes}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  // Video Gallery Variations
+  // Variation 1: Featured Hero Video
+  const VideoGalleryFeaturedPreview = () => (
+    <div className="w-full max-w-2xl space-y-4">
+      <div className="relative h-56 bg-slate-900 rounded-2xl overflow-hidden group cursor-pointer">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform">
+            <Play className="h-10 w-10 text-white ml-1" />
+          </div>
+        </div>
+        <div className="absolute bottom-4 left-4 right-4">
+          <span className="px-2 py-1 bg-red-600 text-white text-xs font-bold rounded">LIVE</span>
+          <h3 className="mt-2 text-white font-bold text-lg">Featured Documentary: Into the Wild</h3>
+          <p className="text-white/70 text-sm">2.3M views • 45:32</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-4 gap-3">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="aspect-video bg-slate-800 rounded-xl relative group cursor-pointer">
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <Play className="h-6 w-6 text-white" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  // Variation 2: YouTube-style Grid
+  const VideoGalleryGridPreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-3 gap-4">
+      {[
+        { title: 'Tech Review', channel: 'TechWorld', views: '1.2M', gradient: 'from-blue-600 to-cyan-500' },
+        { title: 'Cooking Tips', channel: 'ChefMaster', views: '890K', gradient: 'from-orange-500 to-red-500' },
+        { title: 'Travel Vlog', channel: 'Wanderlust', views: '2.1M', gradient: 'from-emerald-500 to-teal-500' },
+        { title: 'Music Mix', channel: 'BeatLab', views: '5.4M', gradient: 'from-purple-600 to-pink-500' },
+        { title: 'Fitness', channel: 'FitLife', views: '743K', gradient: 'from-red-500 to-rose-500' },
+        { title: 'Gaming', channel: 'ProGamer', views: '3.8M', gradient: 'from-indigo-600 to-violet-500' }
+      ].map((video, i) => (
+        <div key={i} className="group cursor-pointer">
+          <div className={`aspect-video bg-gradient-to-br ${video.gradient} rounded-xl relative overflow-hidden`}>
+            <div className="absolute inset-0 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+              <Play className="h-10 w-10 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-xs text-white">12:34</div>
+          </div>
+          <div className="mt-2">
+            <p className="font-semibold text-sm text-slate-900 line-clamp-2">{video.title}</p>
+            <p className="text-xs text-slate-500 mt-0.5">{video.channel} • {video.views} views</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  // Variation 3: Compact List View
+  const VideoGalleryListPreview = () => (
+    <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+      {[
+        { title: 'Introduction to Machine Learning', duration: '45:21', views: '125K' },
+        { title: 'Building Your First App', duration: '32:15', views: '89K' },
+        { title: 'Advanced CSS Techniques', duration: '28:44', views: '67K' },
+        { title: 'Database Design Patterns', duration: '51:08', views: '43K' }
+      ].map((video, i) => (
+        <div key={i} className={`flex gap-4 p-4 hover:bg-slate-50 cursor-pointer transition-colors ${i !== 0 ? 'border-t border-slate-100' : ''}`}>
+          <div className="w-40 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0 relative">
+            <Play className="h-8 w-8 text-white" />
+            <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-black/80 rounded text-xs text-white">{video.duration}</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-semibold text-slate-900 mb-1">{video.title}</h4>
+            <p className="text-sm text-slate-500">{video.views} views</p>
+            <div className="mt-2 flex gap-2">
+              <span className="px-2 py-1 bg-slate-100 rounded-full text-xs text-slate-600">Tutorial</span>
+              <span className="px-2 py-1 bg-blue-100 rounded-full text-xs text-blue-600">HD</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  // Variation 4: Cinema/Theater Mode
+  const VideoGalleryTheaterPreview = () => (
+    <div className="w-full max-w-2xl bg-black rounded-3xl overflow-hidden">
+      <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 relative">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-24 h-24 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md hover:bg-white/20 transition-colors cursor-pointer">
+            <Play className="h-12 w-12 text-white ml-1" />
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-white font-bold text-xl">Cinematic Experience</h3>
+              <p className="text-white/60 text-sm mt-1">4K Ultra HD • Dolby Atmos</p>
+            </div>
+            <div className="flex gap-3">
+              <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+                <Heart className="h-5 w-5 text-white" />
+              </button>
+              <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+                <Expand className="h-5 w-5 text-white" />
+              </button>
+            </div>
+          </div>
+          <div className="mt-4 h-1 bg-white/20 rounded-full">
+            <div className="h-full w-1/3 bg-red-600 rounded-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Audio Player Variations
+  const AudioPlayerMinimalPreview = () => (
+    <div className="w-full max-w-md flex items-center gap-3 p-3 border border-border rounded-lg bg-card">
+      <button className="p-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
+        <Play className="h-4 w-4" />
+      </button>
+      <div className="flex-1 h-1 bg-border rounded-full">
+        <div className="h-full bg-primary rounded-full" style={{ width: '40%' }} />
+      </div>
+      <span className="text-xs text-muted-foreground">1:45</span>
+    </div>
+  )
+
+  const AudioPlayerWaveformPreview = () => (
+    <div className="w-full max-w-md p-4 border border-border rounded-lg bg-card space-y-3">
+      <div className="flex items-end gap-1 justify-center h-16">
+        {[30, 50, 40, 70, 45, 80, 60, 35, 75, 50, 40, 60].map((h, i) => (
+          <div key={i} className="w-2 bg-primary rounded-t transition-all" style={{ height: `${h}%` }} />
+        ))}
+      </div>
+      <div className="flex items-center gap-3">
+        <button className="p-2 rounded-full bg-primary text-primary-foreground">
+          <Play className="h-4 w-4" />
+        </button>
+        <div className="flex-1 text-sm text-foreground">Track Name</div>
+        <span className="text-xs text-muted-foreground">2:30</span>
+      </div>
+    </div>
+  )
+
+  const AudioPlayerPlaylistPreview = () => (
+    <div className="w-full max-w-md border border-border rounded-lg overflow-hidden">
+      <div className="p-3 bg-primary/10 flex items-center gap-3">
+        <button className="p-2 rounded-full bg-primary text-primary-foreground">
+          <Play className="h-4 w-4" />
+        </button>
+        <div className="flex-1">
+          <p className="text-sm font-medium text-foreground">Now Playing</p>
+          <div className="h-1 bg-border rounded-full mt-1">
+            <div className="h-full bg-primary rounded-full" style={{ width: '45%' }} />
+          </div>
+        </div>
+      </div>
+      <div className="divide-y divide-border">
+        {[1, 2, 3].map(i => (
+          <div key={i} className="p-2 hover:bg-accent cursor-pointer text-sm text-foreground">Track {i}</div>
+        ))}
+      </div>
+    </div>
+  )
+
+  const AudioPlayerModernPreview = () => (
+    <div className="w-full max-w-md bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl p-6 space-y-4">
+      <div className="text-center">
+        <p className="text-lg font-bold text-foreground">Song Title</p>
+        <p className="text-sm text-muted-foreground">Artist Name</p>
+      </div>
+      <div className="h-1 bg-border rounded-full">
+        <div className="h-full bg-primary rounded-full" style={{ width: '40%' }} />
+      </div>
+      <div className="flex items-center justify-center gap-4">
+        <button className="p-2 rounded-full hover:bg-accent"><ChevronLeft className="h-5 w-5" /></button>
+        <button className="p-4 rounded-full bg-primary text-primary-foreground">
+          <Play className="h-6 w-6" />
+        </button>
+        <button className="p-2 rounded-full hover:bg-accent"><ChevronRight className="h-5 w-5" /></button>
+      </div>
+    </div>
+  )
+
+  // Image Comparison Variations
+  const ImageComparisonSliderPreview = () => (
+    <div className="w-full max-w-md relative h-48 rounded-lg overflow-hidden border border-border">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-primary/20 w-1/2"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-12 bg-primary cursor-col-resize"></div>
+      <p className="absolute top-2 left-2 text-xs text-foreground">Before</p>
+      <p className="absolute top-2 right-2 text-xs text-foreground">After</p>
+    </div>
+  )
+
+  const ImageComparisonSideBySidePreview = () => (
+    <div className="w-full max-w-md flex gap-2">
+      <div className="flex-1 h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
+        <span className="text-xs text-foreground">Before</span>
+      </div>
+      <div className="flex-1 h-48 bg-gradient-to-br from-accent/20 to-primary/20 rounded-lg flex items-center justify-center">
+        <span className="text-xs text-foreground">After</span>
+      </div>
+    </div>
+  )
+
+  const ImageComparisonOverlayPreview = () => (
+    <div className="w-full max-w-md relative h-48 rounded-lg overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-primary/20 opacity-50 hover:opacity-0 transition-opacity"></div>
+      <p className="absolute top-2 left-2 text-xs text-foreground bg-black/50 px-2 py-1 rounded">Hover to compare</p>
+    </div>
+  )
+
+  const ImageComparisonHotspotsPreview = () => (
+    <div className="w-full max-w-md relative h-48 rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20">
+      <div className="absolute top-1/4 left-1/3 h-4 w-4 bg-primary rounded-full cursor-pointer animate-pulse"></div>
+      <div className="absolute top-1/2 right-1/3 h-4 w-4 bg-primary rounded-full cursor-pointer animate-pulse"></div>
+      <div className="absolute bottom-1/4 left-1/2 h-4 w-4 bg-primary rounded-full cursor-pointer animate-pulse"></div>
+    </div>
+  )
+
+  // Media Upload Variations
+  const MediaUploadDragDropPreview = () => (
+    <div className="w-full max-w-md p-8 border-2 border-dashed border-border rounded-lg text-center hover:border-primary transition-colors cursor-pointer">
+      <Play className="h-8 w-8 text-primary mx-auto mb-2" />
+      <p className="text-sm text-foreground font-medium">Drag & Drop Files</p>
+      <p className="text-xs text-muted-foreground mt-1">or click to browse</p>
+    </div>
+  )
+
+  const MediaUploadMultiStepPreview = () => (
+    <div className="w-full max-w-md space-y-4">
+      <div className="flex gap-1">
+        <div className="flex-1 h-1 bg-primary rounded-full"></div>
+        <div className="flex-1 h-1 bg-border rounded-full"></div>
+        <div className="flex-1 h-1 bg-border rounded-full"></div>
+      </div>
+      <div className="p-6 border border-border rounded-lg text-center">
+        <p className="text-sm font-medium text-foreground">Select Files</p>
+      </div>
+    </div>
+  )
+
+  const MediaUploadFileManagerPreview = () => (
+    <div className="w-full max-w-md border border-border rounded-lg p-4 space-y-2">
+      <div className="flex items-center justify-between pb-2 border-b border-border">
+        <p className="text-sm font-medium text-foreground">Files</p>
+        <button className="px-3 py-1 bg-primary text-primary-foreground rounded text-xs">Upload</button>
+      </div>
+      {[1, 2, 3].map(i => (
+        <div key={i} className="flex items-center justify-between p-2 hover:bg-accent rounded">
+          <span className="text-sm text-foreground">file{i}.jpg</span>
+          <X className="h-4 w-4 cursor-pointer" />
+        </div>
+      ))}
+    </div>
+  )
+
+  const MediaUploadProgressPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-foreground">Uploading file.mp4</span>
+        <span className="text-xs text-muted-foreground">65%</span>
+      </div>
+      <div className="h-2 bg-border rounded-full">
+        <div className="h-full bg-primary rounded-full transition-all" style={{ width: '65%' }} />
+      </div>
+    </div>
+  )
+
+  // Slideshow Variations
+  const SlideshowClassicPreview = () => (
+    <div className="w-full max-w-2xl">
+      <div className="relative h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
+        <p className="text-foreground">Slide 1 of 5</p>
+      </div>
+      <div className="mt-3 flex items-center justify-center gap-2">
+        <button className="px-3 py-1 text-xs border border-border rounded hover:bg-accent">Pause</button>
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map(i => <div key={i} className={`h-1 w-8 rounded-full ${i === 1 ? 'bg-primary' : 'bg-border'}`} />)}
+        </div>
+        <button className="px-3 py-1 text-xs border border-border rounded hover:bg-accent">Next</button>
+      </div>
+    </div>
+  )
+
+  const SlideshowFullscreenPreview = () => (
+    <div className="w-full max-w-2xl h-64 bg-black rounded-lg relative overflow-hidden">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <p className="text-white text-xl">Fullscreen Slideshow</p>
+      </div>
+      <button className="absolute top-4 right-4 p-2 bg-white/20 rounded hover:bg-white/30">
+        <Expand className="h-5 w-5 text-white" />
+      </button>
+    </div>
+  )
+
+  const SlideshowThumbnailNavPreview = () => (
+    <div className="w-full max-w-2xl space-y-3">
+      <div className="h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg"></div>
+      <div className="flex gap-2 overflow-x-auto">
+        {[1, 2, 3, 4, 5].map(i => (
+          <div key={i} className={`h-16 w-24 flex-shrink-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded cursor-pointer ${i === 1 ? 'ring-2 ring-primary' : ''}`} />
+        ))}
+      </div>
+    </div>
+  )
+
+  const SlideshowGridOverviewPreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-4 gap-2">
+      {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+        <div key={i} className="aspect-square bg-gradient-to-br from-primary/20 to-accent/20 rounded cursor-pointer hover:ring-2 ring-primary transition-all" />
+      ))}
+    </div>
+  )
+
   const MediaGridPreview = () => (
     <div className="w-full max-w-2xl grid grid-cols-2 gap-3">
       <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center hover:shadow-lg transition-shadow cursor-pointer">
@@ -2609,6 +3131,54 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     </div>
   )
 
+  const ProductGalleryCarouselPreview = () => {
+    const [current, setCurrent] = useState(0)
+    return (
+      <div className="w-full max-w-2xl space-y-3">
+        <div className="h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
+          <p className="text-foreground">Image {current + 1}</p>
+        </div>
+        <div className="flex items-center justify-between">
+          <button onClick={() => setCurrent((current - 1 + 4) % 4)} className="p-2 rounded-lg hover:bg-accent transition-colors"><ChevronLeft className="h-5 w-5" /></button>
+          <div className="flex gap-2">
+            {[0, 1, 2, 3].map(i => <div key={i} className={`h-2 w-2 rounded-full ${i === current ? 'bg-primary' : 'bg-border'}`} />)}
+          </div>
+          <button onClick={() => setCurrent((current + 1) % 4)} className="p-2 rounded-lg hover:bg-accent transition-colors"><ChevronRight className="h-5 w-5" /></button>
+        </div>
+      </div>
+    )
+  }
+
+  const ProductGalleryGridPreview = () => (
+    <div className="w-full max-w-2xl space-y-3">
+      <div className="h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg"></div>
+      <div className="grid grid-cols-4 gap-2">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg cursor-pointer hover:ring-2 ring-primary transition-all"></div>
+        ))}
+      </div>
+    </div>
+  )
+
+  const ProductGalleryZoomPreview = () => (
+    <div className="w-full max-w-2xl">
+      <div className="relative h-64 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center group cursor-zoom-in">
+        <p className="text-foreground">Hover to zoom</p>
+      </div>
+    </div>
+  )
+
+  const ProductGalleryThumbnailPreview = () => (
+    <div className="w-full max-w-2xl flex gap-3">
+      <div className="w-24 space-y-2">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded cursor-pointer hover:ring-2 ring-primary transition-all"></div>
+        ))}
+      </div>
+      <div className="flex-1 h-64 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg"></div>
+    </div>
+  )
+
   const PriceDisplayPreview = () => (
     <div className="w-full max-w-sm space-y-3 p-4 border border-border rounded-lg">
       <div>
@@ -2626,6 +3196,41 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     </div>
   )
 
+  const PriceDisplayBasicPreview = () => (
+    <div className="w-full max-w-sm p-4 border border-border rounded-lg">
+      <p className="text-2xl font-bold text-primary">$29.99</p>
+    </div>
+  )
+
+  const PriceDisplaySalePreview = () => (
+    <div className="w-full max-w-sm p-4 border border-border rounded-lg">
+      <div className="flex items-baseline gap-2">
+        <p className="text-2xl font-bold text-primary">$29.99</p>
+        <p className="text-sm text-muted-foreground line-through">$49.99</p>
+        <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs font-bold rounded">40% OFF</span>
+      </div>
+    </div>
+  )
+
+  const PriceDisplayTieredPreview = () => (
+    <div className="w-full max-w-sm p-4 border border-border rounded-lg space-y-2">
+      <div className="text-xs text-muted-foreground">Starting at</div>
+      <p className="text-2xl font-bold text-primary">$29.99</p>
+      <div className="space-y-1 text-xs text-muted-foreground">
+        <p>• 1-10 items: $29.99 each</p>
+        <p>• 11-50 items: $24.99 each</p>
+        <p>• 51+ items: $19.99 each</p>
+      </div>
+    </div>
+  )
+
+  const PriceDisplaySubscriptionPreview = () => (
+    <div className="w-full max-w-sm p-4 border border-border rounded-lg space-y-2">
+      <p className="text-2xl font-bold text-primary">$29.99<span className="text-sm text-muted-foreground">/month</span></p>
+      <p className="text-xs text-muted-foreground">Or $299/year (save 17%)</p>
+    </div>
+  )
+
   const AddToCartButtonPreview = () => (
     <div className="w-full max-w-sm space-y-3">
       <div className="flex items-center gap-2">
@@ -2638,6 +3243,43 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
       <button className="w-full px-4 py-2 border border-border rounded-lg text-foreground font-medium hover:bg-accent transition-colors flex items-center justify-center gap-2">
         <Heart className="h-4 w-4" />
         Add to Wishlist
+      </button>
+    </div>
+  )
+
+  const AddToCartSimplePreview = () => (
+    <div className="w-full max-w-sm">
+      <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">
+        Add to Cart
+      </button>
+    </div>
+  )
+
+  const AddToCartQuantityPreview = () => (
+    <div className="w-full max-w-sm flex items-center gap-2">
+      <input type="number" defaultValue="1" min="1" className="w-16 px-2 py-2 border border-border rounded-lg bg-background text-foreground text-sm" />
+      <button className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">
+        Add to Cart
+      </button>
+    </div>
+  )
+
+  const AddToCartVariantPreview = () => (
+    <div className="w-full max-w-sm space-y-3">
+      <select className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm">
+        <option>Size: Medium</option>
+        <option>Size: Large</option>
+      </select>
+      <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">
+        Add to Cart
+      </button>
+    </div>
+  )
+
+  const AddToCartAnimatedPreview = () => (
+    <div className="w-full max-w-sm">
+      <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all hover:scale-105 active:scale-95">
+        Add to Cart
       </button>
     </div>
   )
@@ -2665,6 +3307,60 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     </div>
   )
 
+  const ProductFilterSidebarPreview = () => (
+    <div className="w-full max-w-xs border border-border rounded-lg p-4 space-y-4">
+      <h3 className="font-semibold text-foreground">Filters</h3>
+      <div className="space-y-3">
+        <div>
+          <p className="text-xs font-medium text-foreground mb-2">Category</p>
+          {['Electronics', 'Clothing', 'Books'].map(cat => (
+            <label key={cat} className="flex items-center gap-2 text-xs text-foreground cursor-pointer py-1">
+              <input type="checkbox" className="rounded" />
+              {cat}
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+
+  const ProductFilterDropdownPreview = () => (
+    <div className="w-full max-w-sm flex gap-2">
+      <select className="flex-1 px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm">
+        <option>All Categories</option>
+        <option>Electronics</option>
+        <option>Clothing</option>
+      </select>
+      <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm">Filter</button>
+    </div>
+  )
+
+  const ProductFilterChipsPreview = () => (
+    <div className="w-full max-w-md flex flex-wrap gap-2">
+      {['Electronics', 'Sale', 'Featured', 'New'].map(chip => (
+        <button key={chip} className="px-3 py-1 bg-accent text-foreground rounded-full text-xs hover:bg-primary hover:text-primary-foreground transition-colors">
+          {chip} ×
+        </button>
+      ))}
+    </div>
+  )
+
+  const ProductFilterAdvancedPreview = () => (
+    <div className="w-full max-w-sm space-y-3 p-4 border border-border rounded-lg">
+      <h3 className="font-semibold text-foreground">Advanced Filters</h3>
+      <div className="space-y-3">
+        <div>
+          <label className="text-xs font-medium text-foreground block mb-1">Price Range</label>
+          <input type="range" min="0" max="100" className="w-full" />
+        </div>
+        <div>
+          <label className="text-xs font-medium text-foreground block mb-1">Rating</label>
+          <input type="range" min="0" max="5" className="w-full" />
+        </div>
+      </div>
+    </div>
+  )
+
   const CheckoutFormPreview = () => (
     <div className="w-full max-w-md space-y-3 p-4 border border-border rounded-lg">
       <p className="text-sm font-medium text-foreground">Checkout</p>
@@ -2673,6 +3369,45 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
         <input type="email" placeholder="Email" className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm" />
         <input type="text" placeholder="Address" className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm" />
         <button className="w-full px-3 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">Complete Purchase</button>
+      </div>
+    </div>
+  )
+
+  const CheckoutFormSimplePreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      <input type="text" placeholder="Full Name" className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm" />
+      <input type="email" placeholder="Email" className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm" />
+      <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">Complete Purchase</button>
+    </div>
+  )
+
+  const CheckoutFormMultiStepPreview = () => (
+    <div className="w-full max-w-md space-y-4">
+      <div className="flex gap-1">
+        <div className="flex-1 h-1 bg-primary rounded-full"></div>
+        <div className="flex-1 h-1 bg-border rounded-full"></div>
+        <div className="flex-1 h-1 bg-border rounded-full"></div>
+      </div>
+      <input type="text" placeholder="Full Name" className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm" />
+      <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm">Next</button>
+    </div>
+  )
+
+  const CheckoutFormExpressPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+        Express Checkout
+      </button>
+      <div className="relative"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border"></div></div><div className="relative flex justify-center text-xs"><span className="px-2 bg-card text-muted-foreground">Or</span></div></div>
+      <input type="email" placeholder="Email" className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm" />
+    </div>
+  )
+
+  const CheckoutFormGuestPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      <div className="flex gap-2">
+        <button className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm">Sign In</button>
+        <button className="flex-1 px-4 py-2 border border-border rounded-lg text-sm hover:bg-accent transition-colors">Guest Checkout</button>
       </div>
     </div>
   )
@@ -2688,6 +3423,81 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
             </div>
           </div>
           <p className="text-xs text-muted-foreground">Great product, highly recommend!</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const ProductReviewsListPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="p-3 border border-border rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm font-medium text-foreground">Reviewer {i}</p>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map(j => <span key={j} className={`text-xs ${j <= 4 ? 'text-yellow-500' : 'text-border'}`}>★</span>)}
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">Great product!</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const ProductReviewsSummaryPreview = () => (
+    <div className="w-full max-w-md p-4 border border-border rounded-lg space-y-3">
+      <div className="flex items-center gap-4">
+        <div className="text-center">
+          <p className="text-3xl font-bold text-foreground">4.5</p>
+          <div className="flex gap-1">
+            {[1, 2, 3, 4, 5].map(i => <span key={i} className={`text-xs ${i <= 4 ? 'text-yellow-500' : 'text-border'}`}>★</span>)}
+          </div>
+        </div>
+        <div className="flex-1 space-y-1">
+          {[5, 4, 3, 2, 1].map(i => (
+            <div key={i} className="flex items-center gap-2 text-xs">
+              <span>{i}★</span>
+              <div className="flex-1 h-2 bg-border rounded-full"><div className="h-full bg-primary rounded-full" style={{ width: `${i * 20}%` }} /></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+
+  const ProductReviewsFilteredPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      <div className="flex gap-2">
+        <button className="px-3 py-1 bg-primary text-primary-foreground rounded text-xs">All</button>
+        <button className="px-3 py-1 border border-border rounded text-xs hover:bg-accent transition-colors">5★</button>
+        <button className="px-3 py-1 border border-border rounded text-xs hover:bg-accent transition-colors">4★</button>
+      </div>
+      <div className="p-3 border border-border rounded-lg">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm font-medium text-foreground">Reviewer</p>
+          <div className="flex gap-1">
+            {[1, 2, 3, 4, 5].map(i => <span key={i} className="text-xs text-yellow-500">★</span>)}
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground">Excellent!</p>
+      </div>
+    </div>
+  )
+
+  const ProductReviewsVerifiedPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      {[1, 2].map(i => (
+        <div key={i} className="p-3 border border-border rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-foreground">Verified Buyer</p>
+              <span className="px-2 py-0.5 bg-green-500/10 text-green-700 text-xs rounded">✓ Verified</span>
+            </div>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map(j => <span key={j} className={`text-xs ${j <= 4 ? 'text-yellow-500' : 'text-border'}`}>★</span>)}
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">Great product!</p>
         </div>
       ))}
     </div>
@@ -2770,6 +3580,271 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
             <p className="text-xs text-foreground ml-8">Great article! Very informative.</p>
           </div>
         ))}
+      </div>
+    </div>
+  )
+
+  const CommentSystemThreadedPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      <textarea placeholder="Add a comment..." className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm resize-none" rows={2} />
+      <div className="space-y-3">
+        <div className="border-l-2 border-border pl-3">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-6 h-6 rounded-full bg-primary/20"></div>
+            <p className="text-xs font-medium text-foreground">User 1</p>
+          </div>
+          <p className="text-xs text-foreground mb-2">Main comment</p>
+          <div className="border-l-2 border-border pl-3 space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-primary/20"></div>
+              <p className="text-xs font-medium text-foreground">User 2</p>
+            </div>
+            <p className="text-xs text-muted-foreground">Reply to comment</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const CommentSystemFlatPreview = () => (
+    <div className="w-full max-w-md space-y-2">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="p-3 border border-border rounded-lg hover:bg-accent transition-colors">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-6 h-6 rounded-full bg-primary/20"></div>
+            <p className="text-xs font-medium text-foreground">User {i}</p>
+          </div>
+          <p className="text-xs text-foreground">Comment text here</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const CommentSystemModeratedPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      <div className="p-3 bg-accent/50 border border-border rounded-lg">
+        <p className="text-xs text-foreground mb-2">Your comment will be reviewed before publishing</p>
+        <textarea placeholder="Add a comment..." className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm resize-none" rows={2} />
+      </div>
+    </div>
+  )
+
+  const CommentSystemRealtimePreview = () => (
+    <div className="w-full max-w-md space-y-2">
+      <div className="flex items-center gap-2 mb-2">
+        <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
+        <p className="text-xs text-muted-foreground">Live comments</p>
+      </div>
+      {[1, 2].map(i => (
+        <div key={i} className="p-2 border border-border rounded-lg">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded-full bg-primary/20"></div>
+            <p className="text-xs font-medium text-foreground">User {i}</p>
+            <p className="text-xs text-muted-foreground">Just now</p>
+          </div>
+          <p className="text-xs text-foreground mt-1">Comment {i}</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const RatingSystemThumbsPreview = () => (
+    <div className="w-full max-w-md space-y-3 p-4 border border-border rounded-lg">
+      <p className="text-sm font-medium text-foreground">Was this helpful?</p>
+      <div className="flex gap-3">
+        <button className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors">
+          <span className="text-lg">👍</span>
+          <span className="text-sm font-medium">Yes (234)</span>
+        </button>
+        <button className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-accent transition-colors">
+          <span className="text-lg">👎</span>
+          <span className="text-sm font-medium">No (12)</span>
+        </button>
+      </div>
+    </div>
+  )
+
+  const RatingSystemEmojiPreview = () => (
+    <div className="w-full max-w-md space-y-3 p-4 border border-border rounded-lg">
+      <p className="text-sm font-medium text-foreground">How do you feel about this?</p>
+      <div className="flex gap-2 justify-center">
+        {['😍', '😊', '😐', '😕', '😢'].map((emoji, i) => (
+          <button key={i} className="p-3 text-2xl hover:scale-110 transition-transform cursor-pointer">
+            {emoji}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+
+  const RatingSystemDetailedPreview = () => (
+    <div className="w-full max-w-md space-y-4 p-4 border border-border rounded-lg">
+      <div className="flex items-center justify-between">
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map(i => (
+            <button key={i} className="text-2xl text-yellow-500">★</button>
+          ))}
+        </div>
+        <span className="text-sm font-bold text-foreground">4.5/5</span>
+      </div>
+      <div className="space-y-2">
+        {[5, 4, 3, 2, 1].map(stars => (
+          <div key={stars} className="flex items-center gap-2 text-xs">
+            <span className="w-8 text-foreground">{stars}★</span>
+            <div className="flex-1 h-2 bg-border rounded-full overflow-hidden">
+              <div className="h-full bg-primary rounded-full" style={{ width: `${stars * 20}%` }} />
+            </div>
+            <span className="w-8 text-muted-foreground">{stars * 20}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  const FollowButtonSimplePreview = () => (
+    <div className="w-full max-w-md">
+      <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm">
+        Follow
+      </button>
+    </div>
+  )
+
+  const FollowButtonCountPreview = () => (
+    <div className="w-full max-w-md space-y-2">
+      <button className="w-full px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm flex items-center justify-center gap-2">
+        <span>Follow</span>
+        <span className="px-2 py-0.5 bg-primary-foreground/20 rounded-full text-xs">1.2K</span>
+      </button>
+    </div>
+  )
+
+  const FollowButtonAnimatedPreview = () => (
+    <div className="w-full max-w-md">
+      <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:scale-105 active:scale-95 transition-transform font-medium text-sm">
+        Follow
+      </button>
+    </div>
+  )
+
+  const FollowButtonMultiPreview = () => (
+    <div className="w-full max-w-md flex gap-2">
+      <button className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm">Follow</button>
+      <button className="flex-1 px-4 py-2 border border-border rounded-lg hover:bg-accent transition-colors text-sm">Message</button>
+    </div>
+  )
+
+  const SocialFeedTimelinePreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      {[1, 2].map(i => (
+        <div key={i} className="flex gap-3">
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-full bg-primary/20"></div>
+            {i < 2 && <div className="w-1 flex-1 bg-border mt-2"></div>}
+          </div>
+          <div className="flex-1 pb-4">
+            <p className="text-sm font-medium text-foreground mb-1">User {i}</p>
+            <p className="text-sm text-foreground">Post content here</p>
+            <p className="text-xs text-muted-foreground mt-1">2h ago</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const SocialFeedMasonryPreview = () => (
+    <div className="w-full max-w-md columns-2 gap-3">
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className={`mb-3 break-inside-avoid p-3 border border-border rounded-lg ${i % 2 === 0 ? 'h-32' : 'h-24'}`}>
+          <p className="text-sm text-foreground">Post {i}</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const SocialFeedCardsPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      {[1, 2].map(i => (
+        <div key={i} className="p-4 border border-border rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-full bg-primary/20"></div>
+            <div>
+              <p className="text-sm font-medium text-foreground">User {i}</p>
+              <p className="text-xs text-muted-foreground">2h ago</p>
+            </div>
+          </div>
+          <p className="text-sm text-foreground">Social post content</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const SocialFeedStoriesPreview = () => (
+    <div className="w-full max-w-md flex gap-2 overflow-x-auto pb-2">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="flex-shrink-0">
+          <div className="w-16 h-16 rounded-full border-2 border-primary p-1">
+            <div className="w-full h-full rounded-full bg-gradient-to-br from-primary/20 to-accent/20"></div>
+          </div>
+          <p className="text-xs text-center text-foreground mt-1">User {i}</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const UserProfileCardPreview = () => (
+    <div className="w-full max-w-sm border border-border rounded-lg p-4 text-center">
+      <div className="w-16 h-16 rounded-full bg-primary/20 mx-auto mb-3"></div>
+      <p className="text-sm font-bold text-foreground">John Doe</p>
+      <p className="text-xs text-muted-foreground">@johndoe</p>
+      <button className="w-full mt-3 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm">Follow</button>
+    </div>
+  )
+
+  const UserProfileFullPreview = () => (
+    <div className="w-full max-w-md border border-border rounded-lg overflow-hidden">
+      <div className="h-24 bg-gradient-to-r from-primary/20 to-accent/20"></div>
+      <div className="p-4">
+        <div className="flex items-start gap-3 -mt-12">
+          <div className="w-20 h-20 rounded-full bg-primary/20 border-4 border-card"></div>
+          <div className="flex-1 mt-12">
+            <p className="text-sm font-bold text-foreground">John Doe</p>
+            <p className="text-xs text-muted-foreground">@johndoe</p>
+          </div>
+        </div>
+        <p className="text-sm text-foreground mt-3">Bio information here</p>
+        <div className="flex gap-4 text-xs mt-3">
+          <div><p className="font-bold text-foreground">1.2K</p><p className="text-muted-foreground">Followers</p></div>
+          <div><p className="font-bold text-foreground">342</p><p className="text-muted-foreground">Following</p></div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const UserProfileCompactPreview = () => (
+    <div className="w-full max-w-sm p-3 border border-border rounded-lg flex items-center gap-3">
+      <div className="w-12 h-12 rounded-full bg-primary/20"></div>
+      <div className="flex-1">
+        <p className="text-sm font-medium text-foreground">John Doe</p>
+        <p className="text-xs text-muted-foreground">@johndoe</p>
+      </div>
+      <button className="px-3 py-1 bg-primary text-primary-foreground rounded text-xs">Follow</button>
+    </div>
+  )
+
+  const UserProfileSocialPreview = () => (
+    <div className="w-full max-w-sm border border-border rounded-lg p-4">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-12 h-12 rounded-full bg-primary/20"></div>
+        <div>
+          <p className="text-sm font-bold text-foreground">John Doe</p>
+          <p className="text-xs text-muted-foreground">@johndoe</p>
+        </div>
+      </div>
+      <p className="text-sm text-foreground mb-3">Bio text</p>
+      <div className="flex justify-center gap-2">
+        <button className="p-2 rounded-lg hover:bg-accent transition-colors"><Globe className="h-4 w-4" /></button>
+        <button className="p-2 rounded-lg hover:bg-accent transition-colors"><Globe className="h-4 w-4" /></button>
+        <button className="p-2 rounded-lg hover:bg-accent transition-colors"><Globe className="h-4 w-4" /></button>
       </div>
     </div>
   )
@@ -3054,6 +4129,638 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     )
   }
 
+  // ============ PRICING TABLE VARIATIONS ============
+  // Variation 1: Minimal Flat Cards
+  const PricingTableSimplePreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-3 gap-4">
+      {[
+        { name: 'Starter', price: 9, color: 'bg-slate-100', textColor: 'text-slate-700', features: ['1 User', '5GB Storage', 'Email Support'] },
+        { name: 'Growth', price: 29, color: 'bg-blue-50', textColor: 'text-blue-700', features: ['5 Users', '25GB Storage', 'Priority Support', 'Analytics'] },
+        { name: 'Scale', price: 99, color: 'bg-slate-900', textColor: 'text-white', features: ['Unlimited Users', '100GB Storage', '24/7 Support', 'API Access'] }
+      ].map((plan, i) => (
+        <div key={i} className={`p-5 rounded-xl ${plan.color} ${i === 2 ? 'text-white' : ''}`}>
+          <p className={`text-xs font-medium uppercase tracking-wider ${i === 2 ? 'text-slate-400' : 'text-slate-500'}`}>{plan.name}</p>
+          <p className={`text-3xl font-black mt-2 ${plan.textColor}`}>${plan.price}<span className="text-sm font-normal opacity-70">/mo</span></p>
+          <ul className={`mt-4 space-y-2 text-xs ${i === 2 ? 'text-slate-300' : 'text-slate-600'}`}>
+            {plan.features.map((f, j) => <li key={j}>• {f}</li>)}
+          </ul>
+          <button className={`w-full mt-4 py-2 rounded-lg text-sm font-semibold transition-all ${i === 2 ? 'bg-white text-slate-900 hover:bg-slate-100' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>Get Started</button>
+        </div>
+      ))}
+    </div>
+  )
+
+  // Variation 2: Horizontal Comparison Table
+  const PricingTableComparisonPreview = () => (
+    <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+      <div className="grid grid-cols-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <div className="p-4 font-bold text-sm">Features</div>
+        <div className="p-4 text-center font-bold text-sm border-l border-white/20">Free</div>
+        <div className="p-4 text-center font-bold text-sm border-l border-white/20 bg-white/10">Pro</div>
+        <div className="p-4 text-center font-bold text-sm border-l border-white/20">Team</div>
+      </div>
+      {[
+        { feature: 'Projects', free: '3', pro: 'Unlimited', team: 'Unlimited' },
+        { feature: 'Storage', free: '1GB', pro: '50GB', team: '500GB' },
+        { feature: 'Support', free: 'Email', pro: 'Priority', team: 'Dedicated' },
+        { feature: 'API Access', free: '✕', pro: '✓', team: '✓' },
+      ].map((row, i) => (
+        <div key={i} className={`grid grid-cols-4 text-sm ${i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}`}>
+          <div className="p-3 font-medium text-slate-700">{row.feature}</div>
+          <div className="p-3 text-center text-slate-600 border-l border-slate-100">{row.free}</div>
+          <div className="p-3 text-center text-indigo-600 font-medium border-l border-slate-100 bg-indigo-50/50">{row.pro}</div>
+          <div className="p-3 text-center text-slate-600 border-l border-slate-100">{row.team}</div>
+        </div>
+      ))}
+      <div className="grid grid-cols-4 p-4 bg-slate-50 border-t border-slate-200">
+        <div></div>
+        <div className="text-center"><button className="px-4 py-2 text-xs border border-slate-300 rounded-lg hover:bg-slate-100">Free</button></div>
+        <div className="text-center"><button className="px-4 py-2 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">$19/mo</button></div>
+        <div className="text-center"><button className="px-4 py-2 text-xs border border-slate-300 rounded-lg hover:bg-slate-100">$49/mo</button></div>
+      </div>
+    </div>
+  )
+
+  // Variation 3: Toggle with Animated Cards
+  const PricingTableTogglePreview = () => {
+    const [isAnnual, setIsAnnual] = useState(true)
+    return (
+      <div className="w-full max-w-2xl space-y-6">
+        <div className="flex items-center justify-center gap-4 bg-slate-100 rounded-full p-1 w-fit mx-auto">
+          <button onClick={() => setIsAnnual(false)} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${!isAnnual ? 'bg-white shadow text-slate-900' : 'text-slate-500'}`}>Monthly</button>
+          <button onClick={() => setIsAnnual(true)} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${isAnnual ? 'bg-white shadow text-slate-900' : 'text-slate-500'}`}>Annual <span className="text-green-600 text-xs">-20%</span></button>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          {[
+            { name: 'Personal', monthlyPrice: 12, features: ['All features', 'Priority email'] },
+            { name: 'Business', monthlyPrice: 39, features: ['All features', 'Dedicated support', 'Custom integrations'] }
+          ].map((plan, i) => (
+            <div key={i} className={`p-6 rounded-2xl border-2 transition-all hover:shadow-xl ${i === 1 ? 'border-emerald-500 bg-gradient-to-br from-emerald-50 to-teal-50' : 'border-slate-200 bg-white'}`}>
+              <p className="font-bold text-lg text-slate-900">{plan.name}</p>
+              <div className="mt-2">
+                <span className="text-4xl font-black text-slate-900">${isAnnual ? Math.floor(plan.monthlyPrice * 0.8) : plan.monthlyPrice}</span>
+                <span className="text-slate-500">/mo</span>
+              </div>
+              {isAnnual && <p className="text-xs text-emerald-600 mt-1">Save ${plan.monthlyPrice * 12 * 0.2}/year</p>}
+              <ul className="mt-4 space-y-2">
+                {plan.features.map((f, j) => <li key={j} className="flex items-center gap-2 text-sm text-slate-600"><Check className="h-4 w-4 text-emerald-500" />{f}</li>)}
+              </ul>
+              <button className={`w-full mt-5 py-3 rounded-xl font-semibold transition-all ${i === 1 ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>Choose Plan</button>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Variation 4: Featured Spotlight with Gradient
+  const PricingTableFeaturedPreview = () => (
+    <div className="w-full max-w-2xl">
+      <div className="relative bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 rounded-3xl p-8 text-white overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+        <div className="relative z-10">
+          <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-bold mb-4">MOST POPULAR</div>
+          <h3 className="text-2xl font-black">Professional Plan</h3>
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="text-5xl font-black">$79</span>
+            <span className="text-white/70">/month</span>
+          </div>
+          <ul className="mt-6 space-y-3">
+            {['Unlimited projects', 'Advanced analytics', 'Priority support', 'Custom integrations', 'Team collaboration'].map((f, i) => (
+              <li key={i} className="flex items-center gap-3 text-sm"><div className="h-5 w-5 rounded-full bg-white/20 flex items-center justify-center"><Check className="h-3 w-3" /></div>{f}</li>
+            ))}
+          </ul>
+          <button className="w-full mt-8 py-4 bg-white text-purple-600 rounded-2xl font-bold text-lg hover:bg-slate-100 transition-all shadow-lg">Start Free Trial</button>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="p-4 bg-slate-50 rounded-xl text-center">
+          <p className="text-sm text-slate-500">Basic</p>
+          <p className="text-xl font-bold text-slate-900">$29/mo</p>
+        </div>
+        <div className="p-4 bg-slate-50 rounded-xl text-center">
+          <p className="text-sm text-slate-500">Enterprise</p>
+          <p className="text-xl font-bold text-slate-900">Custom</p>
+        </div>
+      </div>
+    </div>
+  )
+
+  // ============ SERVICE CARD VARIATIONS ============
+  // Variation 1: Minimal Icon Card with Hover Effect
+  const ServiceCardIconPreview = () => (
+    <div className="w-full max-w-sm group">
+      <div className="relative p-6 bg-white border border-slate-200 rounded-2xl hover:shadow-2xl hover:border-blue-200 transition-all duration-300 overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500" />
+        <div className="relative">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/25">
+            <Cpu className="h-7 w-7 text-white" />
+          </div>
+          <h3 className="mt-4 text-lg font-bold text-slate-900">Cloud Computing</h3>
+          <p className="mt-2 text-sm text-slate-500 leading-relaxed">Scale your infrastructure with our enterprise-grade cloud solutions.</p>
+          <button className="mt-4 flex items-center gap-2 text-blue-600 text-sm font-semibold group-hover:gap-3 transition-all">
+            Learn More <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Variation 2: Glass Morphism Image Card
+  const ServiceCardImagePreview = () => (
+    <div className="w-full max-w-sm">
+      <div className="relative h-64 rounded-3xl overflow-hidden bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500">
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+          <div className="backdrop-blur-sm bg-white/10 rounded-2xl p-4 border border-white/20">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                <Star className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white">Premium Design</h3>
+                <p className="text-xs text-white/70">UI/UX Excellence</p>
+              </div>
+            </div>
+            <p className="text-xs text-white/80">Transform your brand with stunning visual experiences</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Variation 3: Detailed Feature List Card
+  const ServiceCardDetailedPreview = () => (
+    <div className="w-full max-w-sm bg-slate-900 rounded-2xl p-6 text-white">
+      <div className="flex items-center justify-between mb-4">
+        <div className="p-3 bg-amber-500/20 rounded-xl">
+          <Sparkles className="h-6 w-6 text-amber-400" />
+        </div>
+        <span className="px-3 py-1 bg-amber-500/20 rounded-full text-amber-400 text-xs font-bold">Popular</span>
+      </div>
+      <h3 className="text-xl font-bold">AI Solutions</h3>
+      <p className="mt-2 text-sm text-slate-400">Next-generation artificial intelligence for your business</p>
+      <div className="mt-5 space-y-3">
+        {['Machine Learning Models', 'Natural Language Processing', 'Predictive Analytics', '24/7 AI Support'].map((feature, i) => (
+          <div key={i} className="flex items-center gap-3 text-sm">
+            <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+              <Check className="h-3 w-3 text-emerald-400" />
+            </div>
+            <span className="text-slate-300">{feature}</span>
+          </div>
+        ))}
+      </div>
+      <button className="w-full mt-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl font-bold hover:from-amber-600 hover:to-orange-600 transition-all">Get Started</button>
+    </div>
+  )
+
+  // Variation 4: Pricing Highlight Card
+  const ServiceCardPricingPreview = () => (
+    <div className="w-full max-w-sm">
+      <div className="relative bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400" />
+        <div className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-xs font-bold text-teal-600 uppercase tracking-wider">Enterprise</span>
+              <h3 className="mt-1 text-xl font-bold text-slate-900">Full Service Package</h3>
+            </div>
+            <div className="text-right">
+              <span className="text-3xl font-black text-slate-900">$299</span>
+              <span className="text-slate-500 text-sm">/mo</span>
+            </div>
+          </div>
+          <p className="mt-3 text-sm text-slate-500">Complete solution for growing businesses with dedicated support</p>
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            {['Unlimited Users', 'API Access', 'Analytics', 'Support'].map((item, i) => (
+              <div key={i} className="flex items-center gap-2 text-xs text-slate-600">
+                <div className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+                {item}
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 flex gap-3">
+            <button className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold hover:bg-teal-700 transition-colors">Subscribe</button>
+            <button className="px-4 py-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+              <ExternalLink className="h-5 w-5 text-slate-400" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // ============ ABOUT SECTION VARIATIONS ============
+  // Variation 1: Story with Side Image
+  const AboutSectionStoryPreview = () => (
+    <div className="w-full max-w-2xl">
+      <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+        <div className="grid grid-cols-2">
+          <div className="h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-6 flex items-center">
+            <div className="w-full h-32 bg-white/20 rounded-2xl backdrop-blur-sm flex items-center justify-center">
+              <span className="text-6xl">🏢</span>
+            </div>
+          </div>
+          <div className="p-6">
+            <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">Our Story</span>
+            <h3 className="mt-2 text-xl font-black text-slate-900">Building the Future Since 2015</h3>
+            <p className="mt-3 text-sm text-slate-600 leading-relaxed">What started as a small startup has grown into a global company serving millions of customers worldwide.</p>
+            <button className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors">Read More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Variation 2: Team Grid with Hover Cards
+  const AboutSectionTeamPreview = () => (
+    <div className="w-full max-w-2xl bg-slate-900 rounded-3xl p-6">
+      <div className="text-center mb-6">
+        <h3 className="text-xl font-bold text-white">Meet Our Leadership</h3>
+        <p className="text-slate-400 text-sm mt-1">The passionate people behind our success</p>
+      </div>
+      <div className="grid grid-cols-4 gap-4">
+        {[
+          { name: 'Sarah Chen', role: 'CEO', color: 'from-rose-400 to-pink-500' },
+          { name: 'James Park', role: 'CTO', color: 'from-blue-400 to-cyan-500' },
+          { name: 'Emily Davis', role: 'Design', color: 'from-amber-400 to-orange-500' },
+          { name: 'Michael Lee', role: 'Product', color: 'from-emerald-400 to-teal-500' }
+        ].map((member, i) => (
+          <div key={i} className="group cursor-pointer">
+            <div className={`w-full aspect-square rounded-2xl bg-gradient-to-br ${member.color} mb-3 group-hover:scale-105 transition-transform shadow-lg`} />
+            <p className="text-white font-semibold text-sm">{member.name}</p>
+            <p className="text-slate-500 text-xs">{member.role}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  // Variation 3: Mission Statement with Values
+  const AboutSectionMissionPreview = () => (
+    <div className="w-full max-w-2xl">
+      <div className="relative bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-8 text-white overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="relative">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full mb-4">
+            <span className="text-lg">🎯</span>
+            <span className="text-sm font-bold">Our Mission</span>
+          </div>
+          <h3 className="text-2xl font-black leading-tight">"To empower every person and organization to achieve more through technology."</h3>
+          <div className="mt-6 grid grid-cols-3 gap-4">
+            {[{ icon: '💡', text: 'Innovation' }, { icon: '🤝', text: 'Integrity' }, { icon: '🌍', text: 'Impact' }].map((val, i) => (
+              <div key={i} className="bg-white/10 rounded-xl p-3 text-center">
+                <span className="text-2xl">{val.icon}</span>
+                <p className="text-sm font-medium mt-1">{val.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Variation 4: Animated Timeline
+  const AboutSectionTimelinePreview = () => (
+    <div className="w-full max-w-2xl bg-white rounded-3xl p-6 shadow-lg border border-slate-100">
+      <h3 className="text-lg font-bold text-slate-900 mb-6">Our Journey</h3>
+      <div className="relative">
+        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500" />
+        {[
+          { year: '2015', title: 'Founded', desc: 'Started in a small garage', color: 'bg-blue-500' },
+          { year: '2018', title: 'Series A', desc: 'Raised $10M funding', color: 'bg-purple-500' },
+          { year: '2021', title: 'Global', desc: 'Expanded to 20 countries', color: 'bg-pink-500' },
+          { year: '2024', title: 'IPO', desc: 'Public company', color: 'bg-amber-500' }
+        ].map((item, i) => (
+          <div key={i} className="relative pl-10 pb-6 last:pb-0">
+            <div className={`absolute left-2 w-5 h-5 rounded-full ${item.color} border-4 border-white shadow`} />
+            <div className="bg-slate-50 rounded-xl p-4 hover:bg-slate-100 transition-colors">
+              <span className="text-xs font-bold text-slate-400">{item.year}</span>
+              <h4 className="font-bold text-slate-900">{item.title}</h4>
+              <p className="text-sm text-slate-500">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  // ============ CONTACT INFO VARIATIONS ============
+  // Variation 1: Modern Card with Gradient Border
+  const ContactInfoCardPreview = () => (
+    <div className="w-full max-w-md">
+      <div className="relative p-6 bg-white rounded-2xl shadow-xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 rounded-2xl opacity-10" />
+        <div className="relative">
+          <h3 className="text-lg font-bold text-slate-900 mb-4">Get in Touch</h3>
+          <div className="space-y-4">
+            {[
+              { icon: MapPin, label: 'Address', value: '123 Innovation Drive, Tech City, CA 94016' },
+              { icon: Globe, label: 'Email', value: 'hello@company.com' },
+              { icon: Bell, label: 'Phone', value: '+1 (555) 123-4567' }
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
+                  <item.icon className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">{item.label}</p>
+                  <p className="text-sm font-medium text-slate-700">{item.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Variation 2: Map Preview with Location Pin
+  const ContactInfoMapPreview = () => (
+    <div className="w-full max-w-md">
+      <div className="relative h-56 bg-gradient-to-br from-slate-100 to-slate-200 rounded-3xl overflow-hidden border border-slate-200">
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fillRule=\'evenodd\'%3E%3Cg fill=\'%23000\' fillOpacity=\'0.1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative">
+            <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center shadow-2xl shadow-red-500/50 animate-bounce">
+              <MapPin className="h-8 w-8 text-white" />
+            </div>
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-2 bg-black/20 rounded-full blur-sm" />
+          </div>
+        </div>
+        <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-3">
+          <p className="font-bold text-slate-900 text-sm">TechCorp Headquarters</p>
+          <p className="text-xs text-slate-500">123 Innovation Drive, Silicon Valley</p>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Variation 3: Icon Grid with Hover Effects
+  const ContactInfoIconsPreview = () => (
+    <div className="w-full max-w-md grid grid-cols-3 gap-4">
+      {[
+        { icon: MapPin, label: 'Visit Us', color: 'from-rose-500 to-pink-500' },
+        { icon: Globe, label: 'Email Us', color: 'from-violet-500 to-purple-500' },
+        { icon: Bell, label: 'Call Us', color: 'from-amber-500 to-orange-500' }
+      ].map((item, i) => (
+        <div key={i} className="group cursor-pointer">
+          <div className="bg-white rounded-2xl p-5 text-center shadow-lg border border-slate-100 hover:shadow-2xl hover:-translate-y-1 transition-all">
+            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mx-auto group-hover:scale-110 transition-transform shadow-lg`}>
+              <item.icon className="h-7 w-7 text-white" />
+            </div>
+            <p className="mt-3 font-semibold text-slate-800 text-sm">{item.label}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  // Variation 4: Social Media Links with Brand Colors
+  const ContactInfoSocialPreview = () => (
+    <div className="w-full max-w-md bg-slate-900 rounded-3xl p-6">
+      <h3 className="text-white font-bold text-lg mb-2">Follow Us</h3>
+      <p className="text-slate-400 text-sm mb-5">Stay connected on social media</p>
+      <div className="grid grid-cols-4 gap-3">
+        {[
+          { color: 'bg-blue-600', name: 'FB' },
+          { color: 'bg-sky-500', name: 'TW' },
+          { color: 'bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400', name: 'IG' },
+          { color: 'bg-blue-700', name: 'IN' }
+        ].map((social, i) => (
+          <button key={i} className={`${social.color} p-4 rounded-xl text-white font-bold hover:scale-105 transition-transform shadow-lg`}>
+            {social.name}
+          </button>
+        ))}
+      </div>
+      <div className="mt-5 pt-5 border-t border-slate-800">
+        <p className="text-slate-400 text-xs">Or email us at <span className="text-white">hello@company.com</span></p>
+      </div>
+    </div>
+  )
+
+  // ============ COMPANY STATS VARIATIONS ============
+  // Variation 1: Animated Counter Cards
+  const CompanyStatsCounterPreview = () => (
+    <div className="w-full max-w-2xl bg-white rounded-3xl p-6 shadow-xl border border-slate-100">
+      <div className="grid grid-cols-4 gap-4">
+        {[
+          { value: '10K+', label: 'Users', icon: '👥' },
+          { value: '500+', label: 'Projects', icon: '📁' },
+          { value: '99%', label: 'Uptime', icon: '⚡' },
+          { value: '24/7', label: 'Support', icon: '💬' }
+        ].map((stat, i) => (
+          <div key={i} className="text-center p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors">
+            <span className="text-3xl">{stat.icon}</span>
+            <p className="mt-2 text-2xl font-black text-slate-900">{stat.value}</p>
+            <p className="text-xs text-slate-500 mt-1">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  // Variation 2: Gradient Stat Cards
+  const CompanyStatsCardsPreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-3 gap-4">
+      {[
+        { value: '2.5M', label: 'Active Users', gradient: 'from-blue-600 to-cyan-500' },
+        { value: '$50M', label: 'Revenue', gradient: 'from-emerald-600 to-teal-500' },
+        { value: '150+', label: 'Countries', gradient: 'from-violet-600 to-purple-500' }
+      ].map((stat, i) => (
+        <div key={i} className={`bg-gradient-to-br ${stat.gradient} rounded-2xl p-6 text-white shadow-xl`}>
+          <p className="text-4xl font-black">{stat.value}</p>
+          <p className="text-sm text-white/80 mt-1">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  // Variation 3: Circle Progress Stats
+  const CompanyStatsAnimatedPreview = () => (
+    <div className="w-full max-w-2xl bg-slate-900 rounded-3xl p-6">
+      <div className="grid grid-cols-3 gap-6">
+        {[
+          { value: 95, label: 'Customer Satisfaction', color: 'text-emerald-400' },
+          { value: 88, label: 'Project Success Rate', color: 'text-blue-400' },
+          { value: 92, label: 'Team Efficiency', color: 'text-amber-400' }
+        ].map((stat, i) => (
+          <div key={i} className="text-center">
+            <div className="relative w-24 h-24 mx-auto">
+              <svg className="w-full h-full transform -rotate-90">
+                <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="8" fill="none" className="text-slate-700" />
+                <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="8" fill="none" strokeLinecap="round" className={stat.color} strokeDasharray={`${stat.value * 2.51} 251`} />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className={`text-xl font-bold ${stat.color}`}>{stat.value}%</span>
+              </div>
+            </div>
+            <p className="mt-3 text-sm text-slate-400">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  // Variation 4: Infographic Style with Icons
+  const CompanyStatsInfographicPreview = () => (
+    <div className="w-full max-w-2xl">
+      <div className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl p-8 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10">
+          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-white rounded-full" />
+          <div className="absolute bottom-10 right-10 w-24 h-24 border-4 border-white rounded-full" />
+        </div>
+        <div className="relative grid grid-cols-4 gap-4 text-white">
+          {[
+            { icon: Users, value: '50K+', label: 'Customers' },
+            { icon: Globe, value: '120+', label: 'Countries' },
+            { icon: TrendingUp, value: '300%', label: 'Growth' },
+            { icon: Heart, value: '4.9★', label: 'Rating' }
+          ].map((stat, i) => (
+            <div key={i} className="text-center">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-3">
+                <stat.icon className="h-6 w-6" />
+              </div>
+              <p className="text-2xl font-black">{stat.value}</p>
+              <p className="text-xs text-white/70">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+
+  // ============ FAQ SECTION VARIATIONS ============
+  // Variation 1: Classic Accordion with Icons
+  const FAQSectionAccordionPreview = () => {
+    const [expanded, setExpanded] = useState<number | null>(0)
+    const faqs = [
+      { q: 'How do I get started?', a: 'Sign up for a free account and follow our onboarding wizard to set up your first project in minutes.' },
+      { q: 'What payment methods do you accept?', a: 'We accept all major credit cards, PayPal, and bank transfers for enterprise plans.' },
+      { q: 'Can I cancel anytime?', a: 'Yes, you can cancel your subscription at any time with no cancellation fees.' }
+    ]
+    return (
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+        <div className="p-6 bg-gradient-to-r from-blue-600 to-indigo-600">
+          <h3 className="text-white font-bold text-lg">Frequently Asked Questions</h3>
+          <p className="text-blue-100 text-sm mt-1">Find answers to common questions</p>
+        </div>
+        <div className="divide-y divide-slate-100">
+          {faqs.map((faq, i) => (
+            <div key={i}>
+              <button onClick={() => setExpanded(expanded === i ? null : i)} className="w-full p-5 flex items-center justify-between text-left hover:bg-slate-50 transition-colors">
+                <span className="font-semibold text-slate-800 pr-4">{faq.q}</span>
+                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all ${expanded === i ? 'bg-blue-100 rotate-180' : 'bg-slate-100'}`}>
+                  <ChevronDown className={`h-4 w-4 ${expanded === i ? 'text-blue-600' : 'text-slate-400'}`} />
+                </div>
+              </button>
+              {expanded === i && <div className="px-5 pb-5 text-sm text-slate-600 leading-relaxed bg-blue-50/50">{faq.a}</div>}
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Variation 2: Category Grid Layout
+  const FAQSectionCategoryPreview = () => (
+    <div className="w-full max-w-lg">
+      <div className="grid grid-cols-2 gap-4">
+        {[
+          { icon: '🚀', title: 'Getting Started', count: 8, color: 'from-violet-500 to-purple-500' },
+          { icon: '💳', title: 'Billing & Plans', count: 12, color: 'from-emerald-500 to-teal-500' },
+          { icon: '🔧', title: 'Technical Support', count: 15, color: 'from-orange-500 to-red-500' },
+          { icon: '🔒', title: 'Security & Privacy', count: 6, color: 'from-blue-500 to-cyan-500' }
+        ].map((cat, i) => (
+          <div key={i} className="group cursor-pointer">
+            <div className="bg-white rounded-2xl p-5 border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all">
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${cat.color} flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform`}>
+                {cat.icon}
+              </div>
+              <h4 className="font-bold text-slate-800">{cat.title}</h4>
+              <p className="text-sm text-slate-500 mt-1">{cat.count} articles</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  // Variation 3: Searchable FAQ with Instant Results
+  const FAQSectionSearchablePreview = () => {
+    const [query, setQuery] = useState('')
+    const faqs = [
+      'How do I reset my password?',
+      'How to upgrade my plan?',
+      'Where can I view my invoices?'
+    ]
+    const filtered = faqs.filter(f => f.toLowerCase().includes(query.toLowerCase()))
+    return (
+      <div className="w-full max-w-lg bg-slate-900 rounded-3xl p-6 text-white">
+        <h3 className="text-xl font-bold mb-2">How can we help?</h3>
+        <p className="text-slate-400 text-sm mb-5">Search our knowledge base or browse topics below</p>
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Type your question..."
+            className="w-full pl-12 pr-4 py-4 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+        <div className="mt-4 space-y-2">
+          {filtered.map((faq, i) => (
+            <div key={i} className="p-4 bg-slate-800/50 rounded-xl hover:bg-slate-800 cursor-pointer transition-colors">
+              <p className="text-sm text-slate-200">{faq}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Variation 4: Tabbed FAQ with Pill Navigation
+  const FAQSectionTabbedPreview = () => {
+    const [activeTab, setActiveTab] = useState('general')
+    const tabs = ['General', 'Pricing', 'Support', 'Account']
+    return (
+      <div className="w-full max-w-lg bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 border border-amber-100">
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          {tabs.map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab.toLowerCase())}
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                activeTab === tab.toLowerCase()
+                  ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/25'
+                  : 'bg-white text-slate-600 hover:bg-amber-100'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-amber-100">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-amber-600 font-bold text-xs">Q</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-800 text-sm">Sample question {i} for {activeTab}?</p>
+                  <p className="text-slate-500 text-xs mt-2">Click to expand and see the full answer to this question.</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   // ============ DASHBOARD AND ADMIN LIVE PREVIEWS ============
   const DashboardWidgetChartPreview = () => (
     <div className="w-full max-w-sm border border-border rounded-lg p-4 space-y-3">
@@ -3112,22 +4819,30 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     </div>
   )
 
-  const DataTablePreview = () => (
-    <div className="w-full max-w-2xl border border-border rounded-lg overflow-hidden">
+  // Data Table Previews - 4 unique variations
+  const DataTablePreview1 = () => (
+    <div className="w-full max-w-2xl border border-border rounded-lg overflow-hidden bg-white">
+      <div className="p-4 border-b border-border bg-gray-50">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-gray-900">Users</h3>
+          <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs">Export</button>
+        </div>
+        <input type="text" placeholder="Search..." className="w-full px-3 py-1.5 border border-gray-300 rounded text-xs" />
+      </div>
       <table className="w-full text-sm">
-        <thead className="bg-accent/50 border-b border-border">
+        <thead className="bg-gray-50 border-b border-gray-200">
           <tr>
-            <th className="px-4 py-2 text-left text-xs font-medium text-foreground">Name</th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-foreground">Status</th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-foreground">Date</th>
+            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
           </tr>
         </thead>
         <tbody>
           {[1, 2, 3].map(i => (
-            <tr key={i} className="border-b border-border hover:bg-accent/30 transition-colors">
-              <td className="px-4 py-2 text-foreground">Item {i}</td>
-              <td className="px-4 py-2"><span className="px-2 py-1 bg-green-500/20 text-green-700 text-xs rounded">Active</span></td>
-              <td className="px-4 py-2 text-muted-foreground">2024-01-{10 + i}</td>
+            <tr key={i} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+              <td className="px-4 py-2 text-gray-900">User {i}</td>
+              <td className="px-4 py-2"><span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">Admin</span></td>
+              <td className="px-4 py-2"><span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">Active</span></td>
             </tr>
           ))}
         </tbody>
@@ -3135,70 +4850,523 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     </div>
   )
 
-  const AnalyticsCardPreview = () => (
-    <div className="w-full max-w-sm border border-border rounded-lg p-4 space-y-3">
+  const DataTablePreview2 = () => (
+    <div className="w-full max-w-2xl">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-bold text-foreground">Projects</h3>
+        <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium">New Project</button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all">
+            <div className="flex items-start justify-between mb-3">
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-1">Project {i}</h4>
+                <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">In Progress</span>
+              </div>
+            </div>
+            <div className="mb-3">
+              <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                <span>Progress</span>
+                <span>75%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-blue-600 h-2 rounded-full" style={{ width: '75%' }} />
+              </div>
+            </div>
+            <div className="text-xs text-gray-600">Deadline: 2024-02-15</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  const DataTablePreview3 = () => (
+    <div className="w-full max-w-2xl bg-black rounded-lg border border-green-500/30 font-mono shadow-2xl">
+      <div className="p-3 border-b border-green-500/30 flex items-center gap-2 text-green-400">
+        <span className="text-xs">USER_MANAGEMENT_SYSTEM v2.1.0</span>
+        <div className="ml-auto flex gap-1">
+          <div className="w-2 h-2 bg-red-500 rounded-full" />
+          <div className="w-2 h-2 bg-yellow-500 rounded-full" />
+          <div className="w-2 h-2 bg-green-500 rounded-full" />
+        </div>
+      </div>
+      <div className="p-3 space-y-2">
+        <div className="text-green-400 text-xs mb-3">
+          <div>&gt; LOADING USER DATABASE...</div>
+          <div>&gt; FOUND 3 ENTRIES</div>
+        </div>
+        {[1, 2, 3].map(i => (
+          <div key={i} className="p-2 rounded border border-gray-700 hover:border-green-500/50 transition-all">
+            <div className="flex items-center justify-between text-green-400 text-xs">
+              <span>[{i}] User_{i}@example.com</span>
+              <span className="text-green-500">&gt;</span>
+            </div>
+            <div className="text-gray-500 text-xs mt-1">Status: ACTIVE | Role: ADMIN</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  const DataTablePreview4 = () => (
+    <div className="w-full max-w-2xl bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl overflow-hidden border-2 border-purple-200">
+      <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-4">
+        <h3 className="text-white font-bold text-lg">Data Records</h3>
+      </div>
+      <table className="w-full text-sm">
+        <thead className="bg-purple-100">
+          <tr>
+            <th className="px-4 py-3 text-left text-xs font-bold text-purple-900 uppercase">ID</th>
+            <th className="px-4 py-3 text-left text-xs font-bold text-purple-900 uppercase">Name</th>
+            <th className="px-4 py-3 text-left text-xs font-bold text-purple-900 uppercase">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[1, 2, 3, 4].map(i => (
+            <tr key={i} className={i % 2 === 0 ? "bg-purple-50" : "bg-white"}>
+              <td className="px-4 py-3 font-bold text-purple-600">{i}</td>
+              <td className="px-4 py-3 text-gray-900 font-medium">Record {i}</td>
+              <td className="px-4 py-3">
+                <span className="px-3 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-bold rounded-full">ACTIVE</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+
+  // Analytics Card Previews - 4 unique variations
+  const AnalyticsCardPreview1 = () => (
+    <div className="w-full max-w-sm border border-border rounded-lg p-4 space-y-3 bg-white">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-foreground">Page Views</p>
-        <TrendingUp className="h-4 w-4 text-primary" />
+        <p className="text-sm font-medium text-gray-900">Page Views</p>
+        <TrendingUp className="h-4 w-4 text-blue-600" />
       </div>
-      <p className="text-2xl font-bold text-primary">45,231</p>
+      <p className="text-2xl font-bold text-gray-900">45,231</p>
       <div className="flex gap-2 text-xs">
-        <span className="text-green-600">↑ 23%</span>
-        <span className="text-muted-foreground">vs last week</span>
+        <span className="text-green-600 font-medium">↑ 23%</span>
+        <span className="text-gray-500">vs last week</span>
       </div>
     </div>
   )
 
-  const StatusIndicatorPreview = () => (
-    <div className="w-full max-w-sm space-y-2 p-4 border border-border rounded-lg">
-      <div className="flex items-center gap-2">
+  const AnalyticsCardPreview2 = () => (
+    <div className="w-full max-w-sm bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-5 text-white shadow-lg">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-sm font-medium opacity-90">Total Revenue</p>
+        <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+          <TrendingUp className="h-5 w-5" />
+        </div>
+      </div>
+      <p className="text-3xl font-bold mb-2">$45,231</p>
+      <div className="flex items-center gap-2 text-xs">
+        <span className="bg-white/20 px-2 py-1 rounded">↑ 12.5%</span>
+        <span className="opacity-80">vs last month</span>
+      </div>
+    </div>
+  )
+
+  const AnalyticsCardPreview3 = () => (
+    <div className="w-full max-w-sm bg-white/80 backdrop-blur-lg border border-white/20 rounded-xl p-5 shadow-xl">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-sm font-medium text-gray-700">Active Users</p>
+        <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+          <TrendingUp className="h-4 w-4 text-blue-600" />
+        </div>
+      </div>
+      <p className="text-2xl font-bold text-gray-900 mb-1">2,345</p>
+      <div className="text-xs text-gray-600">
+        <span className="text-green-600 font-medium">+8.2%</span> from last week
+      </div>
+    </div>
+  )
+
+  const AnalyticsCardPreview4 = () => (
+    <div className="w-full max-w-sm bg-black border-2 border-cyan-500 rounded-lg p-5 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-sm font-medium text-cyan-400">Orders</p>
+        <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center border border-cyan-500/50">
+          <TrendingUp className="h-4 w-4 text-cyan-400" />
+        </div>
+      </div>
+      <p className="text-3xl font-bold text-cyan-400 mb-2">1,234</p>
+      <div className="text-xs text-cyan-300">
+        <span className="text-red-400">↓ 3.1%</span> vs last period
+      </div>
+    </div>
+  )
+
+  // Status Indicator Previews - 4 unique variations
+  const StatusIndicatorPreview1 = () => (
+    <div className="w-full max-w-sm space-y-3 p-4 border border-border rounded-lg bg-white">
+      <div className="flex items-center gap-3">
         <div className="h-3 w-3 rounded-full bg-green-500"></div>
-        <span className="text-sm text-foreground">System Online</span>
+        <div className="flex-1">
+          <span className="text-sm font-medium text-gray-900">API Server</span>
+          <span className="text-xs text-gray-500 ml-2">99.9% uptime</span>
+        </div>
+        <span className="text-xs text-green-600 font-medium">Operational</span>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-        <span className="text-sm text-foreground">Database Warning</span>
+        <div className="flex-1">
+          <span className="text-sm font-medium text-gray-900">Database</span>
+          <span className="text-xs text-gray-500 ml-2">98.5% uptime</span>
+        </div>
+        <span className="text-xs text-yellow-600 font-medium">Degraded</span>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <div className="h-3 w-3 rounded-full bg-red-500"></div>
-        <span className="text-sm text-foreground">API Error</span>
+        <div className="flex-1">
+          <span className="text-sm font-medium text-gray-900">CDN</span>
+          <span className="text-xs text-gray-500 ml-2">95.2% uptime</span>
+        </div>
+        <span className="text-xs text-red-600 font-medium">Maintenance</span>
       </div>
     </div>
   )
 
-  const ActionButtonPreview = () => (
-    <div className="w-full max-w-sm space-y-2">
-      <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">Primary Action</button>
-      <button className="w-full px-4 py-2 border border-border text-foreground rounded-lg text-sm font-medium hover:bg-accent transition-colors">Secondary Action</button>
-      <button className="w-full px-4 py-2 border border-destructive text-destructive rounded-lg text-sm font-medium hover:bg-destructive/10 transition-colors">Danger Action</button>
+  const StatusIndicatorPreview2 = () => (
+    <div className="w-full max-w-sm space-y-4 p-4 border border-border rounded-lg bg-white">
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-900">API Server</span>
+          <span className="text-xs text-green-600 font-medium">99.9%</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="bg-green-500 h-2 rounded-full" style={{ width: '99.9%' }} />
+        </div>
+      </div>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-900">Database</span>
+          <span className="text-xs text-yellow-600 font-medium">98.5%</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="bg-yellow-500 h-2 rounded-full" style={{ width: '98.5%' }} />
+        </div>
+      </div>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-900">CDN</span>
+          <span className="text-xs text-red-600 font-medium">95.2%</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="bg-red-500 h-2 rounded-full" style={{ width: '95.2%' }} />
+        </div>
+      </div>
     </div>
   )
 
-  const SettingsPanelPreview = () => (
-    <div className="w-full max-w-md space-y-3 p-4 border border-border rounded-lg">
-      <p className="text-sm font-medium text-foreground">Settings</p>
-      <div className="space-y-3">
+  const StatusIndicatorPreview3 = () => (
+    <div className="w-full max-w-sm grid grid-cols-2 gap-3">
+      <div className="bg-white border-2 border-green-200 rounded-lg p-3 text-center">
+        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+          <div className="h-6 w-6 rounded-full bg-green-500"></div>
+        </div>
+        <p className="text-xs font-medium text-gray-900 mb-1">API Server</p>
+        <span className="text-xs text-green-600 font-semibold">Operational</span>
+      </div>
+      <div className="bg-white border-2 border-yellow-200 rounded-lg p-3 text-center">
+        <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
+          <div className="h-6 w-6 rounded-full bg-yellow-500"></div>
+        </div>
+        <p className="text-xs font-medium text-gray-900 mb-1">Database</p>
+        <span className="text-xs text-yellow-600 font-semibold">Warning</span>
+      </div>
+      <div className="bg-white border-2 border-red-200 rounded-lg p-3 text-center">
+        <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+          <div className="h-6 w-6 rounded-full bg-red-500"></div>
+        </div>
+        <p className="text-xs font-medium text-gray-900 mb-1">CDN</p>
+        <span className="text-xs text-red-600 font-semibold">Error</span>
+      </div>
+      <div className="bg-white border-2 border-blue-200 rounded-lg p-3 text-center">
+        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+          <div className="h-6 w-6 rounded-full bg-blue-500"></div>
+        </div>
+        <p className="text-xs font-medium text-gray-900 mb-1">Cache</p>
+        <span className="text-xs text-blue-600 font-semibold">Active</span>
+      </div>
+    </div>
+  )
+
+  const StatusIndicatorPreview4 = () => (
+    <div className="w-full max-w-sm bg-black border-2 border-cyan-500 rounded-lg p-4 space-y-3 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+      <div className="flex items-center gap-3">
+        <div className="h-3 w-3 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.8)] animate-pulse"></div>
+        <span className="text-sm font-medium text-cyan-400 font-mono">API_SERVER</span>
+        <span className="ml-auto text-xs text-green-400 font-mono">[ONLINE]</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="h-3 w-3 rounded-full bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.8)] animate-pulse"></div>
+        <span className="text-sm font-medium text-yellow-400 font-mono">DATABASE</span>
+        <span className="ml-auto text-xs text-yellow-400 font-mono">[WARN]</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="h-3 w-3 rounded-full bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.8)] animate-pulse"></div>
+        <span className="text-sm font-medium text-red-400 font-mono">CDN</span>
+        <span className="ml-auto text-xs text-red-400 font-mono">[ERROR]</span>
+      </div>
+    </div>
+  )
+
+  // Action Button Previews - 4 unique variations
+  const ActionButtonPreview1 = () => (
+    <div className="w-full max-w-sm space-y-2 p-4 border border-border rounded-lg bg-white">
+      <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+        <span>⌘</span> Create New
+      </button>
+      <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
+        <span>⌘</span> Upload File
+      </button>
+      <button className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2">
+        <span>⌘</span> Download
+      </button>
+    </div>
+  )
+
+  const ActionButtonPreview2 = () => (
+    <div className="w-full max-w-sm relative h-64">
+      <button className="absolute bottom-4 right-4 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-110 flex items-center justify-center">
+        <span className="text-2xl">+</span>
+      </button>
+      <div className="absolute bottom-20 right-4 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <button className="w-12 h-12 bg-green-600 text-white rounded-full shadow-lg flex items-center justify-center text-sm">↑</button>
+        <button className="w-12 h-12 bg-purple-600 text-white rounded-full shadow-lg flex items-center justify-center text-sm">↓</button>
+        <button className="w-12 h-12 bg-orange-600 text-white rounded-full shadow-lg flex items-center justify-center text-sm">✎</button>
+      </div>
+    </div>
+  )
+
+  const ActionButtonPreview3 = () => (
+    <div className="w-full max-w-sm bg-gray-50 border border-gray-200 rounded-lg p-2 flex items-center gap-2">
+      <button className="px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm font-medium text-gray-700">Edit</button>
+      <button className="px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm font-medium text-gray-700">Copy</button>
+      <button className="px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm font-medium text-gray-700">Share</button>
+      <div className="h-6 w-px bg-gray-300"></div>
+      <button className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm font-medium">Delete</button>
+    </div>
+  )
+
+  const ActionButtonPreview4 = () => (
+    <div className="w-full max-w-sm bg-black border-2 border-cyan-500 rounded-lg p-4 grid grid-cols-2 gap-3 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+      <button className="px-4 py-3 bg-cyan-500/20 border border-cyan-500 rounded-lg text-cyan-400 hover:bg-cyan-500/30 transition-all text-sm font-medium font-mono shadow-[0_0_10px_rgba(6,182,212,0.5)]">
+        CREATE
+      </button>
+      <button className="px-4 py-3 bg-green-500/20 border border-green-500 rounded-lg text-green-400 hover:bg-green-500/30 transition-all text-sm font-medium font-mono shadow-[0_0_10px_rgba(34,197,94,0.5)]">
+        UPLOAD
+      </button>
+      <button className="px-4 py-3 bg-purple-500/20 border border-purple-500 rounded-lg text-purple-400 hover:bg-purple-500/30 transition-all text-sm font-medium font-mono shadow-[0_0_10px_rgba(168,85,247,0.5)]">
+        DOWNLOAD
+      </button>
+      <button className="px-4 py-3 bg-red-500/20 border border-red-500 rounded-lg text-red-400 hover:bg-red-500/30 transition-all text-sm font-medium font-mono shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+        DELETE
+      </button>
+    </div>
+  )
+
+  // Settings Panel Previews - 4 unique variations
+  const SettingsPanelPreview1 = () => (
+    <div className="w-full max-w-md space-y-4 p-5 border border-gray-200 rounded-lg bg-white">
+      <h3 className="text-sm font-semibold text-gray-900 mb-4">Preferences</h3>
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-foreground">Notifications</span>
+          <div>
+            <span className="text-sm font-medium text-gray-900">Notifications</span>
+            <p className="text-xs text-gray-500">Receive notifications on your device</p>
+          </div>
           <input type="checkbox" defaultChecked className="rounded" />
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-sm text-foreground">Dark Mode</span>
+          <div>
+            <span className="text-sm font-medium text-gray-900">Dark Mode</span>
+            <p className="text-xs text-gray-500">Switch to dark theme</p>
+          </div>
           <input type="checkbox" className="rounded" />
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-sm text-foreground">Auto-save</span>
+          <div>
+            <span className="text-sm font-medium text-gray-900">Auto-save</span>
+            <p className="text-xs text-gray-500">Automatically save changes</p>
+          </div>
           <input type="checkbox" defaultChecked className="rounded" />
         </div>
       </div>
     </div>
   )
 
-  // ============ MARKETING AND PROMOTION LIVE PREVIEWS ============
+  const SettingsPanelPreview2 = () => (
+    <div className="w-full max-w-md border border-gray-200 rounded-lg bg-white">
+      <div className="flex border-b border-gray-200">
+        <button className="flex-1 px-4 py-3 text-sm font-medium text-blue-600 border-b-2 border-blue-600">General</button>
+        <button className="flex-1 px-4 py-3 text-sm font-medium text-gray-600 hover:text-gray-900">Privacy</button>
+        <button className="flex-1 px-4 py-3 text-sm font-medium text-gray-600 hover:text-gray-900">Security</button>
+      </div>
+      <div className="p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-900">Notifications</span>
+          <input type="checkbox" defaultChecked className="rounded" />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-900">Dark Mode</span>
+          <input type="checkbox" className="rounded" />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-900">Auto-save</span>
+          <input type="checkbox" defaultChecked className="rounded" />
+        </div>
+      </div>
+    </div>
+  )
+
+  const SettingsPanelPreview3 = () => (
+    <div className="w-full max-w-md flex border border-gray-200 rounded-lg bg-white">
+      <div className="w-32 border-r border-gray-200 p-3 space-y-1">
+        <button className="w-full px-3 py-2 text-left text-sm font-medium text-blue-600 bg-blue-50 rounded">General</button>
+        <button className="w-full px-3 py-2 text-left text-sm text-gray-600 hover:bg-gray-50 rounded">Privacy</button>
+        <button className="w-full px-3 py-2 text-left text-sm text-gray-600 hover:bg-gray-50 rounded">Security</button>
+      </div>
+      <div className="flex-1 p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-900">Notifications</span>
+          <input type="checkbox" defaultChecked className="rounded" />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-900">Dark Mode</span>
+          <input type="checkbox" className="rounded" />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-900">Auto-save</span>
+          <input type="checkbox" defaultChecked className="rounded" />
+        </div>
+      </div>
+    </div>
+  )
+
+  const SettingsPanelPreview4 = () => (
+    <div className="w-full max-w-md bg-black border-2 border-cyan-500 rounded-lg p-4 space-y-3 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+      <h3 className="text-cyan-400 font-mono text-sm font-bold mb-4 border-b border-cyan-500/30 pb-2">SYSTEM_CONTROLS</h3>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between p-2 bg-cyan-500/10 border border-cyan-500/30 rounded">
+          <span className="text-cyan-400 text-sm font-mono">NOTIFICATIONS</span>
+          <div className="w-12 h-6 bg-cyan-500 rounded-full relative">
+            <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+          </div>
+        </div>
+        <div className="flex items-center justify-between p-2 bg-cyan-500/10 border border-cyan-500/30 rounded">
+          <span className="text-cyan-400 text-sm font-mono">DARK_MODE</span>
+          <div className="w-12 h-6 bg-gray-700 rounded-full relative">
+            <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+          </div>
+        </div>
+        <div className="flex items-center justify-between p-2 bg-cyan-500/10 border border-cyan-500/30 rounded">
+          <span className="text-cyan-400 text-sm font-mono">AUTO_SAVE</span>
+          <div className="w-12 h-6 bg-cyan-500 rounded-full relative">
+            <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // ============ TESTIMONIAL BANNER LIVE PREVIEWS ============
+  const TestimonialBannerWhisperPreview = () => (
+    <div className="w-full max-w-lg bg-white border border-gray-100 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-start gap-4">
+        <span className="text-gray-300 text-xl mt-1">"</span>
+        <div className="flex-1">
+          <p className="text-gray-700 text-sm leading-relaxed mb-4 italic">"This solution transformed our workflow completely. Simple, elegant, and incredibly effective."</p>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+              <span className="text-gray-600 text-sm font-medium">JS</span>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-900">Jessica Smith</div>
+              <div className="text-xs text-gray-500">Product Manager</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const TestimonialBannerHolographicPreview = () => (
+    <div className="w-full max-w-lg bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-500/20 to-pink-500/10 animate-pulse" />
+      <div className="relative">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-cyan-400 text-sm font-bold tracking-wide">⚡ QUANTUM FEEDBACK</span>
+        </div>
+        <div className="flex items-center gap-1 mb-4">
+          {[...Array(5)].map((_, i) => (
+            <span key={i} className="text-yellow-400">⭐</span>
+          ))}
+        </div>
+        <p className="text-lg mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent leading-relaxed">"This quantum leap in technology has revolutionized our entire neural network processing capabilities."</p>
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full flex items-center justify-center">
+            <span className="text-white font-bold text-sm">AC</span>
+          </div>
+          <div>
+            <div className="font-bold text-white">Dr. Alex Chen</div>
+            <div className="text-cyan-400 text-sm">Quantum Research Lab</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const TestimonialBannerRoyalPreview = () => (
+    <div className="w-full max-w-lg bg-gradient-to-b from-amber-50 to-cream border-2 border-amber-200 rounded-lg p-8 shadow-lg">
+      <div className="flex items-center gap-3 mb-6">
+        <span className="text-amber-600 text-xl">👑</span>
+        <span className="text-amber-800 text-sm font-serif font-semibold uppercase tracking-wide">Distinguished Testimonial</span>
+      </div>
+      <span className="text-amber-400 text-4xl mb-4 block">"</span>
+      <p className="text-amber-900 mb-6 font-serif italic text-lg leading-relaxed">In my forty years of distinguished service, I have rarely encountered such exemplary craftsmanship and unwavering commitment to excellence.</p>
+      <div className="flex items-center gap-4">
+        <div className="w-16 h-16 bg-gradient-to-br from-amber-300 to-amber-400 rounded-full border-2 border-amber-600 flex items-center justify-center">
+          <span className="text-amber-800 font-bold text-lg">WH</span>
+        </div>
+        <div>
+          <div className="font-serif font-bold text-amber-900 text-lg">Sir William Hartford</div>
+          <div className="text-amber-700 text-sm">Chairman Emeritus, Royal Institute</div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const TestimonialBannerExplosivePreview = () => (
+    <div className="w-full max-w-lg bg-black text-white rounded-3xl p-8 relative overflow-hidden transform -rotate-1 shadow-2xl">
+      <div className="absolute -top-8 -right-8 w-32 h-32 bg-red-500 rounded-full opacity-20 animate-ping" />
+      <div className="relative">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-red-500 text-2xl animate-bounce">🔥</span>
+          <span className="text-red-400 font-black text-sm uppercase tracking-widest">MIND = BLOWN</span>
+        </div>
+        <div className="text-6xl font-black text-yellow-400 mb-4 transform -skew-x-12 animate-pulse">+2000%</div>
+        <p className="text-2xl font-black mb-6 text-white transform skew-x-3">"ABSOLUTELY INSANE RESULTS!"</p>
+        <div className="flex items-center gap-4">
+          <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-yellow-500 rounded-full flex items-center justify-center transform rotate-12">
+            <span className="text-black text-2xl">📈</span>
+          </div>
+          <div>
+            <div className="text-2xl font-black text-white">MIKE CRUSHER</div>
+            <div className="text-yellow-400 font-black text-lg">EXTREME CEO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
   const CallToActionButtonPreview = () => (
-    <div className="w-full max-w-md text-center space-y-3 p-6 border border-border rounded-lg">
+    <div className="w-full max-w-sm space-y-3 p-4 border border-border rounded-lg">
       <p className="text-sm font-medium text-foreground">Ready to get started?</p>
-      <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">Get Started Now</button>
+      <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">Get Started Now</button>
+      <button className="w-full px-4 py-2 border border-border text-foreground rounded-lg text-sm font-medium hover:bg-accent transition-colors">Learn More</button>
     </div>
   )
 
@@ -3231,52 +5399,389 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     </div>
   )
 
-  const PromotionalBannerPreview = () => (
-    <div className="w-full bg-destructive/10 border border-destructive/30 rounded-lg p-4 text-center">
-      <p className="text-sm font-bold text-destructive">🎉 FLASH SALE</p>
-      <p className="text-xs text-foreground mt-1">50% off everything - Ends in 24 hours!</p>
+  // Promotional Banner Previews - 4 unique variations
+  const PromotionalBannerPreview1 = () => (
+    <div className="w-full bg-red-50 border-2 border-red-300 rounded-lg p-4 text-center">
+      <p className="text-lg font-bold text-red-600">🎉 FLASH SALE</p>
+      <p className="text-sm text-gray-700 mt-1">50% off everything - Ends in 24 hours!</p>
     </div>
   )
 
-  const FeatureHighlightPreview = () => (
-    <div className="w-full max-w-sm border border-border rounded-lg p-4 space-y-3 hover:shadow-lg transition-shadow">
-      <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
-        <Sparkles className="h-6 w-6 text-primary" />
+  const PromotionalBannerPreview2 = () => (
+    <div className="w-full bg-gradient-to-r from-orange-500 to-red-600 rounded-lg p-5 text-center text-white shadow-lg">
+      <p className="text-xl font-bold mb-1">LIMITED TIME OFFER</p>
+      <p className="text-sm opacity-90">Get 50% off on all premium plans. Don't miss out!</p>
+      <button className="mt-3 px-6 py-2 bg-white text-orange-600 rounded-lg font-medium hover:bg-gray-100 transition-colors text-sm">Shop Now</button>
+    </div>
+  )
+
+  const PromotionalBannerPreview3 = () => (
+    <div className="w-full bg-black border-2 border-yellow-400 rounded-lg p-4 text-center">
+      <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="h-2 w-2 bg-yellow-400 rounded-full animate-pulse"></div>
+        <p className="text-yellow-400 font-mono text-sm font-bold">NEW YEAR SALE</p>
+        <div className="h-2 w-2 bg-yellow-400 rounded-full animate-pulse"></div>
       </div>
-      <p className="text-sm font-bold text-foreground">Key Feature</p>
-      <p className="text-xs text-muted-foreground">Description of this amazing feature and its benefits</p>
-      <button className="text-xs text-primary font-medium hover:underline">Learn more →</button>
+      <p className="text-white text-sm">50% OFF - Use code: NEWYEAR2024</p>
     </div>
   )
 
-  const NewsletterBannerPreview = () => (
-    <div className="w-full max-w-2xl bg-accent/50 border border-border rounded-lg p-6 space-y-3">
-      <p className="text-sm font-bold text-foreground">Subscribe to our newsletter</p>
-      <p className="text-xs text-muted-foreground">Get the latest updates delivered to your inbox</p>
+  const PromotionalBannerPreview4 = () => (
+    <div className="w-full bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 rounded-xl p-6 text-center text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="relative z-10">
+        <p className="text-2xl font-bold mb-2">🎊 MEGA SALE</p>
+        <p className="text-lg mb-3">Up to 70% OFF</p>
+        <div className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30">
+          <p className="text-xs">Ends in: 23:59:45</p>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Feature Highlight Previews - 4 unique variations
+  const FeatureHighlightPreview1 = () => (
+    <div className="w-full max-w-sm border border-gray-200 rounded-lg p-5 space-y-3 hover:shadow-lg transition-shadow bg-white">
+      <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+        <Sparkles className="h-6 w-6 text-blue-600" />
+      </div>
+      <p className="text-base font-bold text-gray-900">Key Feature</p>
+      <p className="text-sm text-gray-600">Description of this amazing feature and its benefits for users</p>
+      <button className="text-sm text-blue-600 font-medium hover:underline">Learn more →</button>
+    </div>
+  )
+
+  const FeatureHighlightPreview2 = () => (
+    <div className="w-full max-w-sm bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+      <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-4">
+        <Sparkles className="h-8 w-8 text-white" />
+      </div>
+      <p className="text-lg font-bold mb-2">Premium Feature</p>
+      <p className="text-sm opacity-90 mb-4">Unlock powerful capabilities with this premium feature</p>
+      <button className="px-4 py-2 bg-white text-purple-600 rounded-lg font-medium hover:bg-gray-100 transition-colors text-sm">Explore</button>
+    </div>
+  )
+
+  const FeatureHighlightPreview3 = () => (
+    <div className="w-full max-w-sm bg-white border-l-4 border-green-500 rounded-lg p-5 shadow-md">
+      <div className="flex items-start gap-4">
+        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <Sparkles className="h-5 w-5 text-green-600" />
+        </div>
+        <div className="flex-1">
+          <p className="text-base font-bold text-gray-900 mb-1">Smart Feature</p>
+          <p className="text-sm text-gray-600 mb-3">AI-powered solution that adapts to your needs</p>
+          <button className="text-sm text-green-600 font-semibold hover:underline">Discover →</button>
+        </div>
+      </div>
+    </div>
+  )
+
+  const FeatureHighlightPreview4 = () => (
+    <div className="w-full max-w-sm bg-black border-2 border-cyan-400 rounded-lg p-5 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-10 h-10 bg-cyan-500/20 border border-cyan-400 rounded-lg flex items-center justify-center">
+          <Sparkles className="h-5 w-5 text-cyan-400" />
+        </div>
+        <p className="text-cyan-400 font-mono font-bold text-sm">FEATURE_X</p>
+      </div>
+      <p className="text-white text-sm mb-3">Advanced feature with cutting-edge technology</p>
+      <button className="px-4 py-2 bg-cyan-500 text-black rounded font-mono text-xs font-bold hover:bg-cyan-400 transition-colors">ACTIVATE</button>
+    </div>
+  )
+
+  // Newsletter Banner Previews - 4 unique variations
+  const NewsletterBannerPreview1 = () => (
+    <div className="w-full max-w-2xl bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-3">
+      <p className="text-base font-bold text-gray-900">Subscribe to our newsletter</p>
+      <p className="text-sm text-gray-600">Get the latest updates delivered to your inbox</p>
       <div className="flex gap-2">
-        <input type="email" placeholder="Enter your email" className="flex-1 px-3 py-2 border border-border rounded-lg bg-background text-foreground text-sm" />
-        <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">Subscribe</button>
+        <input type="email" placeholder="Enter your email" className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm" />
+        <button className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">Subscribe</button>
       </div>
     </div>
   )
 
-  const DiscountBadgePreview = () => (
-    <div className="w-full max-w-sm relative">
-      <div className="p-4 border border-border rounded-lg">
-        <p className="text-sm text-foreground">Product Name</p>
-        <p className="text-lg font-bold text-primary">$29.99</p>
+  const NewsletterBannerPreview2 = () => (
+    <div className="w-full max-w-2xl bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white">
+      <p className="text-xl font-bold mb-2">Stay Updated</p>
+      <p className="text-sm opacity-90 mb-4">Join 10,000+ subscribers for weekly insights</p>
+      <div className="flex gap-2">
+        <input type="email" placeholder="your@email.com" className="flex-1 px-4 py-3 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/70 text-sm" />
+        <button className="px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-gray-100 transition-colors text-sm">Subscribe</button>
       </div>
-      <div className="absolute -top-2 -right-2 px-3 py-1 bg-destructive text-destructive-foreground rounded-full text-xs font-bold">
+    </div>
+  )
+
+  const NewsletterBannerPreview3 = () => (
+    <div className="w-full max-w-2xl bg-white border-2 border-gray-300 rounded-lg p-6">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <p className="text-lg font-bold text-gray-900 mb-1">Newsletter</p>
+          <p className="text-sm text-gray-600">Get exclusive content delivered weekly</p>
+        </div>
+        <div className="flex gap-2 flex-1 justify-end">
+          <input type="email" placeholder="Email" className="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded bg-white text-gray-900 text-sm" />
+          <button className="px-4 py-2 bg-gray-900 text-white rounded font-medium hover:bg-gray-800 transition-colors text-sm">Join</button>
+        </div>
+      </div>
+    </div>
+  )
+
+  const NewsletterBannerPreview4 = () => (
+    <div className="w-full max-w-2xl bg-black border-2 border-green-400 rounded-lg p-6 font-mono">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="h-2 w-2 bg-green-400 rounded-full animate-pulse"></div>
+        <p className="text-green-400 text-sm font-bold">NEWSLETTER_SUBSCRIPTION</p>
+      </div>
+      <p className="text-white text-sm mb-4">Enter your email to receive updates:</p>
+      <div className="flex gap-2">
+        <input type="email" placeholder="user@domain.com" className="flex-1 px-4 py-2 bg-gray-900 border border-green-400/50 rounded text-green-400 placeholder-green-400/50 text-sm font-mono" />
+        <button className="px-6 py-2 bg-green-400 text-black rounded font-bold hover:bg-green-300 transition-colors text-sm">SUBMIT</button>
+      </div>
+    </div>
+  )
+
+  // Discount Badge Previews - 4 unique variations
+  const DiscountBadgePreview1 = () => (
+    <div className="w-full max-w-sm relative">
+      <div className="p-5 border border-gray-200 rounded-lg bg-white">
+        <p className="text-sm text-gray-600 mb-1">Premium Product</p>
+        <p className="text-2xl font-bold text-gray-900">$29.99</p>
+        <p className="text-xs text-gray-500 line-through mt-1">$49.99</p>
+      </div>
+      <div className="absolute -top-2 -right-2 px-3 py-1 bg-red-500 text-white rounded-full text-xs font-bold shadow-lg">
         -30%
       </div>
     </div>
   )
 
-  const LandingHeroPreview = () => (
-    <div className="w-full max-w-2xl h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex flex-col items-center justify-center text-center space-y-4">
-      <p className="text-2xl font-bold text-foreground">Welcome to Our Platform</p>
-      <p className="text-sm text-muted-foreground max-w-md">Start your journey with us today and discover amazing possibilities</p>
-      <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">Get Started</button>
+  const DiscountBadgePreview2 = () => (
+    <div className="w-full max-w-sm relative">
+      <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white">
+        <p className="text-sm opacity-90 mb-1">Special Offer</p>
+        <p className="text-3xl font-bold mb-1">$29.99</p>
+        <p className="text-sm line-through opacity-75">$49.99</p>
+      </div>
+      <div className="absolute -top-3 -right-3 w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center shadow-xl rotate-12">
+        <p className="text-red-600 font-bold text-sm">SAVE<br/>30%</p>
+      </div>
+    </div>
+  )
+
+  const DiscountBadgePreview3 = () => (
+    <div className="w-full max-w-sm relative">
+      <div className="p-5 border-2 border-blue-300 rounded-lg bg-blue-50">
+        <div className="flex items-baseline gap-2">
+          <p className="text-3xl font-bold text-blue-600">$29</p>
+          <p className="text-lg text-blue-600">.99</p>
+        </div>
+        <p className="text-xs text-gray-600 line-through mt-1">Was $49.99</p>
+      </div>
+      <div className="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 rounded-bl-lg rounded-tr-lg text-xs font-bold">
+        40% OFF
+      </div>
+    </div>
+  )
+
+  const DiscountBadgePreview4 = () => (
+    <div className="w-full max-w-sm relative">
+      <div className="bg-black border-2 border-cyan-400 rounded-lg p-5 font-mono">
+        <p className="text-cyan-400 text-xs mb-2">PRODUCT_NAME</p>
+        <div className="flex items-baseline gap-2 mb-2">
+          <p className="text-cyan-400 text-2xl font-bold">$29</p>
+          <p className="text-cyan-400 text-lg">.99</p>
+        </div>
+        <p className="text-gray-500 text-xs line-through">$49.99</p>
+      </div>
+      <div className="absolute -top-2 -right-2 bg-cyan-400 text-black px-3 py-1 rounded font-mono text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.8)]">
+        -30%
+      </div>
+    </div>
+  )
+
+  // Landing Hero Previews - 4 unique variations
+  const LandingHeroPreview1 = () => (
+    <div className="w-full max-w-2xl h-56 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl flex flex-col items-center justify-center text-center space-y-4 p-6 border border-gray-200">
+      <p className="text-3xl font-bold text-gray-900">Welcome to Our Platform</p>
+      <p className="text-base text-gray-600 max-w-md">Start your journey with us today and discover amazing possibilities</p>
+      <button className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-lg">Get Started</button>
+    </div>
+  )
+
+  const LandingHeroPreview2 = () => (
+    <div className="w-full max-w-2xl h-64 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-2xl flex flex-col items-center justify-center text-center space-y-5 p-8 text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="relative z-10">
+        <p className="text-4xl font-bold mb-3">Transform Your Business</p>
+        <p className="text-lg opacity-90 max-w-md mb-4">Join thousands of companies already using our platform</p>
+        <div className="flex gap-3 justify-center">
+          <button className="px-8 py-3 bg-white text-purple-600 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-xl">Start Free Trial</button>
+          <button className="px-8 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg font-medium hover:bg-white/30 transition-colors">Learn More</button>
+        </div>
+      </div>
+    </div>
+  )
+
+  const LandingHeroPreview3 = () => (
+    <div className="w-full max-w-2xl h-56 bg-white border-2 border-gray-300 rounded-xl flex flex-col items-center justify-center text-center space-y-4 p-6">
+      <p className="text-3xl font-bold text-gray-900">Simple. Powerful. Effective.</p>
+      <p className="text-base text-gray-600 max-w-md">Everything you need to succeed, all in one place</p>
+      <div className="flex gap-3">
+        <button className="px-6 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors">Get Started</button>
+        <button className="px-6 py-2 border-2 border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition-colors">Watch Demo</button>
+      </div>
+    </div>
+  )
+
+  const LandingHeroPreview4 = () => (
+    <div className="w-full max-w-2xl h-64 bg-black border-2 border-green-400 rounded-lg flex flex-col items-center justify-center text-center space-y-5 p-8 font-mono relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-green-400/10 to-transparent"></div>
+      <div className="relative z-10">
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <div className="h-2 w-2 bg-green-400 rounded-full animate-pulse"></div>
+          <p className="text-green-400 text-2xl font-bold">SYSTEM_READY</p>
+          <div className="h-2 w-2 bg-green-400 rounded-full animate-pulse"></div>
+        </div>
+        <p className="text-white text-lg mb-4">Initialize your journey with cutting-edge technology</p>
+        <button className="px-8 py-3 bg-green-400 text-black rounded font-bold hover:bg-green-300 transition-colors shadow-[0_0_20px_rgba(34,197,94,0.5)] text-sm">EXECUTE</button>
+      </div>
+    </div>
+  )
+
+  // ============ PRODUCT SHOWCASE LIVE PREVIEWS ============
+  // Variation 1: 3D Floating Card Product Display
+  const ProductShowcase3DCardPreview = () => (
+    <div className="w-full max-w-lg">
+      <div className="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10" />
+        <div className="relative">
+          <div className="w-48 h-48 mx-auto bg-gradient-to-br from-white/20 to-white/5 rounded-2xl shadow-2xl transform rotate-6 hover:rotate-0 transition-all duration-500 flex items-center justify-center backdrop-blur-sm border border-white/10">
+            <Package className="h-20 w-20 text-white/80" />
+          </div>
+          <div className="mt-6 text-center">
+            <span className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full text-xs text-white font-bold">NEW RELEASE</span>
+            <h3 className="mt-3 text-2xl font-black text-white">Pro Edition X1</h3>
+            <p className="mt-2 text-slate-400 text-sm">Next-generation performance meets elegant design</p>
+            <div className="mt-4 flex items-center justify-center gap-4">
+              <span className="text-3xl font-black text-white">$299</span>
+              <span className="text-slate-500 line-through">$399</span>
+            </div>
+            <button className="mt-4 w-full py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl text-white font-bold hover:from-blue-600 hover:to-purple-600 transition-all">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Variation 2: Split Screen Product Hero
+  const ProductShowcaseSplitHeroPreview = () => (
+    <div className="w-full max-w-2xl">
+      <div className="grid grid-cols-2 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="bg-gradient-to-br from-amber-100 to-orange-100 p-8 flex items-center justify-center">
+          <div className="w-40 h-40 bg-white rounded-3xl shadow-xl flex items-center justify-center transform -rotate-12 hover:rotate-0 transition-transform">
+            <Sparkles className="h-16 w-16 text-amber-500" />
+          </div>
+        </div>
+        <div className="bg-white p-8 flex flex-col justify-center">
+          <span className="text-amber-600 text-xs font-bold uppercase tracking-wider">Premium Collection</span>
+          <h3 className="mt-2 text-2xl font-black text-slate-900">Artisan Series</h3>
+          <p className="mt-3 text-slate-600 text-sm leading-relaxed">Handcrafted with precision and passion for those who appreciate excellence.</p>
+          <div className="mt-4 flex items-center gap-2">
+            {[1, 2, 3, 4, 5].map(i => <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />)}
+            <span className="text-slate-500 text-xs ml-2">(128 reviews)</span>
+          </div>
+          <div className="mt-5 flex items-center gap-4">
+            <button className="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors">Shop Now</button>
+            <button className="p-3 border-2 border-slate-200 rounded-xl hover:border-slate-300 transition-colors">
+              <Heart className="h-5 w-5 text-slate-400" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Variation 3: Interactive 360 View Style
+  const ProductShowcase360Preview = () => {
+    const [rotation, setRotation] = useState(0)
+    return (
+      <div className="w-full max-w-lg">
+        <div className="bg-gradient-to-b from-slate-50 to-slate-100 rounded-3xl p-8 border border-slate-200">
+          <div className="relative">
+            <div 
+              className="w-56 h-56 mx-auto bg-white rounded-full shadow-2xl flex items-center justify-center transition-transform duration-300"
+              style={{ transform: `rotateY(${rotation}deg)` }}
+            >
+              <div className="w-36 h-36 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <Cpu className="h-16 w-16 text-white" />
+              </div>
+            </div>
+            <div className="absolute top-4 right-4 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">IN STOCK</div>
+          </div>
+          <div className="mt-6 flex items-center justify-center gap-2">
+            <button onClick={() => setRotation(r => r - 45)} className="p-2 bg-slate-200 rounded-full hover:bg-slate-300 transition-colors">
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <span className="text-xs text-slate-500 px-4">Rotate View</span>
+            <button onClick={() => setRotation(r => r + 45)} className="p-2 bg-slate-200 rounded-full hover:bg-slate-300 transition-colors">
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="mt-6 text-center">
+            <h3 className="text-xl font-bold text-slate-900">TechCore Pro Max</h3>
+            <p className="mt-1 text-slate-500 text-sm">Ultimate performance processor</p>
+            <div className="mt-4 grid grid-cols-3 gap-3">
+              {[{ label: 'Speed', value: '5.2GHz' }, { label: 'Cores', value: '16' }, { label: 'Cache', value: '64MB' }].map((spec, i) => (
+                <div key={i} className="bg-slate-50 rounded-xl p-3 text-center">
+                  <p className="text-lg font-bold text-indigo-600">{spec.value}</p>
+                  <p className="text-xs text-slate-500">{spec.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Variation 4: Neon Cyberpunk Product Card
+  const ProductShowcaseNeonPreview = () => (
+    <div className="w-full max-w-lg">
+      <div className="relative bg-black rounded-2xl p-8 overflow-hidden border border-cyan-500/30">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-pink-500/5" />
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500" />
+        <div className="relative">
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <span className="text-cyan-400 font-mono text-xs">MODEL_X9000</span>
+              <h3 className="mt-1 text-2xl font-black text-white">QUANTUM<span className="text-cyan-400">DRIVE</span></h3>
+            </div>
+            <div className="px-3 py-1 bg-pink-500/20 border border-pink-500 rounded-full">
+              <span className="text-pink-400 text-xs font-bold font-mono">LIMITED</span>
+            </div>
+          </div>
+          <div className="w-48 h-48 mx-auto mb-6 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-pink-500/20 rounded-full blur-2xl" />
+            <div className="relative w-full h-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-cyan-500/30 flex items-center justify-center">
+              <Zap className="h-20 w-20 text-cyan-400" />
+            </div>
+          </div>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-slate-500 text-xs font-mono">PRICE</p>
+              <p className="text-3xl font-black text-white">$<span className="text-cyan-400">499</span>.99</p>
+            </div>
+            <div className="text-right">
+              <p className="text-slate-500 text-xs font-mono">AVAILABILITY</p>
+              <p className="text-emerald-400 font-bold">READY TO SHIP</p>
+            </div>
+          </div>
+          <button className="w-full py-4 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-xl font-bold text-black hover:from-cyan-400 hover:to-pink-400 transition-all shadow-lg shadow-cyan-500/25">
+            ADD TO CART
+          </button>
+        </div>
+      </div>
     </div>
   )
 
@@ -3438,6 +5943,249 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
             <div className="flex-1">
               <p className="text-sm font-medium text-foreground">Most read article {i}</p>
               <p className="text-xs text-muted-foreground">{5000 - i * 1000} reads</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  // ============ NEWS GRID VARIATIONS ============
+  const NewsGridClassicPreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-2 gap-3">
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+          <div className="h-24 bg-gradient-to-br from-primary/20 to-accent/20"></div>
+          <div className="p-2">
+            <p className="text-xs text-primary font-medium">Category</p>
+            <p className="text-xs font-medium text-foreground line-clamp-2">News headline {i}</p>
+            <p className="text-xs text-muted-foreground mt-1">{i} hours ago</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const NewsGridMagazinePreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-3 gap-4">
+      <div className="col-span-2 row-span-2 border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+        <div className="h-48 bg-gradient-to-br from-primary/30 to-accent/30"></div>
+        <div className="p-3">
+          <p className="text-sm text-primary font-medium">Featured</p>
+          <p className="text-base font-bold text-foreground">Main story headline</p>
+        </div>
+      </div>
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+          <div className="h-20 bg-gradient-to-br from-primary/20 to-accent/20"></div>
+          <div className="p-2">
+            <p className="text-xs font-medium text-foreground line-clamp-2">Story {i}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const NewsGridCompactPreview = () => (
+    <div className="w-full max-w-md space-y-2">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="p-2 border-l-4 border-primary hover:bg-accent transition-colors cursor-pointer">
+          <p className="text-sm font-medium text-foreground">{i}. Compact news headline</p>
+          <p className="text-xs text-muted-foreground">{i} min ago</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const NewsGridFeaturedPreview = () => (
+    <div className="w-full max-w-2xl space-y-4">
+      <div className="border-2 border-primary rounded-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer">
+        <div className="h-40 bg-gradient-to-br from-primary/30 to-accent/30"></div>
+        <div className="p-4">
+          <div className="px-2 py-1 bg-primary text-primary-foreground text-xs font-bold rounded inline-block mb-2">FEATURED</div>
+          <p className="text-lg font-bold text-foreground">Featured story headline</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {[1, 2].map(i => (
+          <div key={i} className="border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+            <div className="h-24 bg-gradient-to-br from-primary/20 to-accent/20"></div>
+            <div className="p-2">
+              <p className="text-sm font-medium text-foreground">Story {i}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  // ============ LIVE UPDATES VARIATIONS ============
+  const LiveUpdatesTickerPreview = () => (
+    <div className="w-full max-w-2xl bg-destructive/10 border border-destructive/30 rounded-lg p-3 flex items-center gap-3">
+      <div className="h-2 w-2 rounded-full bg-destructive animate-pulse flex-shrink-0"></div>
+      <div className="flex-1 overflow-hidden">
+        <p className="text-sm text-foreground font-medium truncate">LIVE: Breaking news update ticker</p>
+      </div>
+    </div>
+  )
+
+  const LiveUpdatesTimelinePreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="flex gap-3">
+          <div className="flex flex-col items-center">
+            <div className="h-3 w-3 rounded-full bg-primary"></div>
+            {i < 3 && <div className="w-1 h-full bg-border mt-1"></div>}
+          </div>
+          <div className="flex-1 pb-4">
+            <p className="text-xs text-muted-foreground">{i} min ago</p>
+            <p className="text-sm font-medium text-foreground">Live update {i}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const LiveUpdatesFeedPreview = () => (
+    <div className="w-full max-w-md space-y-2">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="p-3 border border-border rounded-lg hover:bg-accent transition-colors">
+          <div className="flex items-start gap-2">
+            <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0 animate-pulse"></div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-foreground">Live update {i}</p>
+              <p className="text-xs text-muted-foreground">Just now</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const LiveUpdatesNotificationPreview = () => (
+    <div className="w-full max-w-md">
+      <div className="p-4 bg-primary/10 border-l-4 border-primary rounded-lg">
+        <div className="flex items-start gap-3">
+          <div className="h-2 w-2 rounded-full bg-primary mt-1.5 animate-pulse"></div>
+          <div>
+            <p className="text-sm font-bold text-foreground">LIVE UPDATE</p>
+            <p className="text-sm text-foreground mt-1">Breaking news notification</p>
+            <p className="text-xs text-muted-foreground mt-1">Just now</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // ============ TRENDING TOPICS VARIATIONS ============
+  const TrendingTopicsListPreview = () => (
+    <div className="w-full max-w-md space-y-2">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="p-3 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-foreground">Trending topic {i}</p>
+            <p className="text-xs text-muted-foreground">{1000 * i}K posts</p>
+          </div>
+          <TrendingUp className="h-4 w-4 text-primary" />
+        </div>
+      ))}
+    </div>
+  )
+
+  const TrendingTopicsTagsPreview = () => (
+    <div className="w-full max-w-md flex flex-wrap gap-2">
+      {['Technology', 'Business', 'Sports', 'Entertainment', 'Science'].map((topic, i) => (
+        <button key={i} className="px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium hover:bg-primary/20 transition-colors">
+          #{topic}
+        </button>
+      ))}
+    </div>
+  )
+
+  const TrendingTopicsCardsPreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-2 gap-3">
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="p-3 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp className="h-4 w-4 text-primary" />
+            <span className="text-xs text-primary font-bold">#{i} Trending</span>
+          </div>
+          <p className="text-sm font-medium text-foreground">Topic {i}</p>
+          <p className="text-xs text-muted-foreground">{1000 * i}K posts</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const TrendingTopicsChartPreview = () => (
+    <div className="w-full max-w-md space-y-3">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="space-y-1">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-foreground font-medium">Topic {i}</span>
+            <span className="text-muted-foreground">{100 - i * 15}%</span>
+          </div>
+          <div className="h-2 bg-border rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${100 - i * 15}%` }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  // ============ MOST READ VARIATIONS ============
+  const MostReadRankedPreview = () => (
+    <div className="w-full max-w-md space-y-2">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="p-3 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
+          <div className="flex items-start gap-3">
+            <div className="text-lg font-bold text-primary">{i}</div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-foreground">Most read article {i}</p>
+              <p className="text-xs text-muted-foreground">{5000 - i * 1000} reads</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const MostReadCardsPreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-3 gap-3">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+          <div className="h-20 bg-gradient-to-br from-primary/20 to-accent/20"></div>
+          <div className="p-2">
+            <div className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-bold rounded inline-block mb-1">#{i}</div>
+            <p className="text-xs font-medium text-foreground line-clamp-2">Article {i}</p>
+            <p className="text-xs text-muted-foreground">{5000 - i * 1000} reads</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
+  const MostReadSidebarPreview = () => (
+    <div className="w-full max-w-xs border border-border rounded-lg p-3 space-y-2">
+      <h3 className="text-sm font-bold text-foreground mb-2">Most Read</h3>
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="flex gap-2 pb-2 border-b border-border last:border-0 hover:bg-accent p-1 rounded transition-colors cursor-pointer">
+          <span className="text-xs font-bold text-primary">{i}</span>
+          <p className="text-xs text-foreground line-clamp-2 flex-1">Article headline {i}</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const MostReadGridPreview = () => (
+    <div className="w-full max-w-2xl grid grid-cols-2 gap-3">
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="p-3 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer">
+          <div className="flex items-start gap-2">
+            <div className="text-xl font-bold text-primary">{i}</div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-foreground">Popular article {i}</p>
+              <p className="text-xs text-muted-foreground">{5000 - i * 1000} reads • 2h ago</p>
             </div>
           </div>
         </div>
@@ -4411,46 +7159,46 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
         <VideoPlayerLivePreview key="4" />,
       ],
       'Image Slider': [
-        <ImageSliderPreview key="1" />,
-        <ImageSliderPreview key="2" />,
-        <ImageSliderPreview key="3" />,
-        <ImageSliderPreview key="4" />,
+        <ImageSliderClassicPreview key="1" />,
+        <ImageSliderModernPreview key="2" />,
+        <ImageSliderThumbnailPreview key="3" />,
+        <ImageSliderAutoplayPreview key="4" />,
       ],
       'Media Grid': [
-        <MediaGridPreview key="1" />,
-        <MediaGridPreview key="2" />,
-        <MediaGridPreview key="3" />,
-        <MediaGridPreview key="4" />,
+        <MediaGridClassicPreview key="1" />,
+        <MediaGridMasonryPreview key="2" />,
+        <MediaGridFilterablePreview key="3" />,
+        <MediaGridInteractivePreview key="4" />,
       ],
       'Video Gallery': [
-        <VideoGalleryPreview key="1" />,
-        <VideoGalleryPreview key="2" />,
-        <VideoGalleryPreview key="3" />,
-        <VideoGalleryPreview key="4" />,
+        <VideoGalleryFeaturedPreview key="1" />,
+        <VideoGalleryGridPreview key="2" />,
+        <VideoGalleryListPreview key="3" />,
+        <VideoGalleryTheaterPreview key="4" />,
       ],
       'Audio Player': [
-        <AudioPlayerPreview key="1" />,
-        <AudioPlayerPreview key="2" />,
-        <AudioPlayerPreview key="3" />,
-        <AudioPlayerPreview key="4" />,
+        <AudioPlayerMinimalPreview key="1" />,
+        <AudioPlayerWaveformPreview key="2" />,
+        <AudioPlayerPlaylistPreview key="3" />,
+        <AudioPlayerModernPreview key="4" />,
       ],
       'Image Comparison': [
-        <ImageComparisonPreview key="1" />,
-        <ImageComparisonPreview key="2" />,
-        <ImageComparisonPreview key="3" />,
-        <ImageComparisonPreview key="4" />,
+        <ImageComparisonSliderPreview key="1" />,
+        <ImageComparisonSideBySidePreview key="2" />,
+        <ImageComparisonOverlayPreview key="3" />,
+        <ImageComparisonHotspotsPreview key="4" />,
       ],
       'Media Upload': [
-        <MediaUploadPreview key="1" />,
-        <MediaUploadPreview key="2" />,
-        <MediaUploadPreview key="3" />,
-        <MediaUploadPreview key="4" />,
+        <MediaUploadDragDropPreview key="1" />,
+        <MediaUploadMultiStepPreview key="2" />,
+        <MediaUploadFileManagerPreview key="3" />,
+        <MediaUploadProgressPreview key="4" />,
       ],
       'Slideshow': [
-        <SlideshowPreview key="1" />,
-        <SlideshowPreview key="2" />,
-        <SlideshowPreview key="3" />,
-        <SlideshowPreview key="4" />,
+        <SlideshowClassicPreview key="1" />,
+        <SlideshowFullscreenPreview key="2" />,
+        <SlideshowThumbnailNavPreview key="3" />,
+        <SlideshowGridOverviewPreview key="4" />,
       ],
       // News and Content Category
       'Breaking News Ticker': [
@@ -4466,28 +7214,28 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
         <ArticleCardMinimalPreview key="4" />,
       ],
       'News Grid': [
-        <NewsGridPreview key="1" />,
-        <NewsGridPreview key="2" />,
-        <NewsGridPreview key="3" />,
-        <NewsGridPreview key="4" />,
+        <NewsGridClassicPreview key="1" />,
+        <NewsGridMagazinePreview key="2" />,
+        <NewsGridCompactPreview key="3" />,
+        <NewsGridFeaturedPreview key="4" />,
       ],
       'Live Updates': [
-        <LiveUpdatesPreview key="1" />,
-        <LiveUpdatesPreview key="2" />,
-        <LiveUpdatesPreview key="3" />,
-        <LiveUpdatesPreview key="4" />,
+        <LiveUpdatesTickerPreview key="1" />,
+        <LiveUpdatesTimelinePreview key="2" />,
+        <LiveUpdatesFeedPreview key="3" />,
+        <LiveUpdatesNotificationPreview key="4" />,
       ],
       'Trending Topics': [
-        <TrendingTopicsPreview key="1" />,
-        <TrendingTopicsPreview key="2" />,
-        <TrendingTopicsPreview key="3" />,
-        <TrendingTopicsPreview key="4" />,
+        <TrendingTopicsListPreview key="1" />,
+        <TrendingTopicsTagsPreview key="2" />,
+        <TrendingTopicsCardsPreview key="3" />,
+        <TrendingTopicsChartPreview key="4" />,
       ],
       'Most Read': [
-        <MostReadPreview key="1" />,
-        <MostReadPreview key="2" />,
-        <MostReadPreview key="3" />,
-        <MostReadPreview key="4" />,
+        <MostReadRankedPreview key="1" />,
+        <MostReadCardsPreview key="2" />,
+        <MostReadSidebarPreview key="3" />,
+        <MostReadGridPreview key="4" />,
       ],
       // E-commerce Category
       'Product Card': [
@@ -4503,40 +7251,40 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
         <ShoppingCartMiniPreview key="4" />,
       ],
       'Product Gallery': [
-        <ProductGalleryPreview key="1" />,
-        <ProductGalleryPreview key="2" />,
-        <ProductGalleryPreview key="3" />,
-        <ProductGalleryPreview key="4" />,
+        <ProductGalleryCarouselPreview key="1" />,
+        <ProductGalleryGridPreview key="2" />,
+        <ProductGalleryZoomPreview key="3" />,
+        <ProductGalleryThumbnailPreview key="4" />,
       ],
       'Price Display': [
-        <PriceDisplayPreview key="1" />,
-        <PriceDisplayPreview key="2" />,
-        <PriceDisplayPreview key="3" />,
-        <PriceDisplayPreview key="4" />,
+        <PriceDisplayBasicPreview key="1" />,
+        <PriceDisplaySalePreview key="2" />,
+        <PriceDisplayTieredPreview key="3" />,
+        <PriceDisplaySubscriptionPreview key="4" />,
       ],
       'Add to Cart': [
-        <AddToCartButtonPreview key="1" />,
-        <AddToCartButtonPreview key="2" />,
-        <AddToCartButtonPreview key="3" />,
-        <AddToCartButtonPreview key="4" />,
+        <AddToCartSimplePreview key="1" />,
+        <AddToCartQuantityPreview key="2" />,
+        <AddToCartVariantPreview key="3" />,
+        <AddToCartAnimatedPreview key="4" />,
       ],
       'Product Filter': [
-        <ProductFilterPreview key="1" />,
-        <ProductFilterPreview key="2" />,
-        <ProductFilterPreview key="3" />,
-        <ProductFilterPreview key="4" />,
+        <ProductFilterSidebarPreview key="1" />,
+        <ProductFilterDropdownPreview key="2" />,
+        <ProductFilterChipsPreview key="3" />,
+        <ProductFilterAdvancedPreview key="4" />,
       ],
       'Checkout Form': [
-        <CheckoutFormPreview key="1" />,
-        <CheckoutFormPreview key="2" />,
-        <CheckoutFormPreview key="3" />,
-        <CheckoutFormPreview key="4" />,
+        <CheckoutFormSimplePreview key="1" />,
+        <CheckoutFormMultiStepPreview key="2" />,
+        <CheckoutFormExpressPreview key="3" />,
+        <CheckoutFormGuestPreview key="4" />,
       ],
       'Product Reviews': [
-        <ProductReviewsPreview key="1" />,
-        <ProductReviewsPreview key="2" />,
-        <ProductReviewsPreview key="3" />,
-        <ProductReviewsPreview key="4" />,
+        <ProductReviewsListPreview key="1" />,
+        <ProductReviewsSummaryPreview key="2" />,
+        <ProductReviewsFilteredPreview key="3" />,
+        <ProductReviewsVerifiedPreview key="4" />,
       ],
       // Social and Engagement Category
       'Social Share': [
@@ -4546,34 +7294,34 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
         <SocialShareInlinePreview key="4" />,
       ],
       'Comment System': [
-        <CommentSystemPreview key="1" />,
-        <CommentSystemPreview key="2" />,
-        <CommentSystemPreview key="3" />,
-        <CommentSystemPreview key="4" />,
+        <CommentSystemThreadedPreview key="1" />,
+        <CommentSystemFlatPreview key="2" />,
+        <CommentSystemModeratedPreview key="3" />,
+        <CommentSystemRealtimePreview key="4" />,
       ],
       'Rating System': [
         <RatingSystemStarsPreview key="1" />,
-        <RatingSystemStarsPreview key="2" />,
-        <RatingSystemStarsPreview key="3" />,
-        <RatingSystemStarsPreview key="4" />,
+        <RatingSystemThumbsPreview key="2" />,
+        <RatingSystemEmojiPreview key="3" />,
+        <RatingSystemDetailedPreview key="4" />,
       ],
       'Follow Button': [
-        <FollowButtonPreview key="1" />,
-        <FollowButtonPreview key="2" />,
-        <FollowButtonPreview key="3" />,
-        <FollowButtonPreview key="4" />,
+        <FollowButtonSimplePreview key="1" />,
+        <FollowButtonCountPreview key="2" />,
+        <FollowButtonAnimatedPreview key="3" />,
+        <FollowButtonMultiPreview key="4" />,
       ],
       'Social Feed': [
-        <SocialFeedPreview key="1" />,
-        <SocialFeedPreview key="2" />,
-        <SocialFeedPreview key="3" />,
-        <SocialFeedPreview key="4" />,
+        <SocialFeedTimelinePreview key="1" />,
+        <SocialFeedMasonryPreview key="2" />,
+        <SocialFeedCardsPreview key="3" />,
+        <SocialFeedStoriesPreview key="4" />,
       ],
       'User Profile': [
-        <UserProfilePreview key="1" />,
-        <UserProfilePreview key="2" />,
-        <UserProfilePreview key="3" />,
-        <UserProfilePreview key="4" />,
+        <UserProfileCardPreview key="1" />,
+        <UserProfileFullPreview key="2" />,
+        <UserProfileCompactPreview key="3" />,
+        <UserProfileSocialPreview key="4" />,
       ],
       // Business and Corporate Category
       'Team Member': [
@@ -4589,40 +7337,40 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
         <TestimonialQuotePreview key="4" />,
       ],
       'Pricing Table': [
-        <PricingTablePreview key="1" />,
-        <PricingTablePreview key="2" />,
-        <PricingTablePreview key="3" />,
-        <PricingTablePreview key="4" />,
+        <PricingTableSimplePreview key="1" />,
+        <PricingTableComparisonPreview key="2" />,
+        <PricingTableTogglePreview key="3" />,
+        <PricingTableFeaturedPreview key="4" />,
       ],
       'Service Card': [
-        <ServiceCardPreview key="1" />,
-        <ServiceCardPreview key="2" />,
-        <ServiceCardPreview key="3" />,
-        <ServiceCardPreview key="4" />,
+        <ServiceCardIconPreview key="1" />,
+        <ServiceCardImagePreview key="2" />,
+        <ServiceCardDetailedPreview key="3" />,
+        <ServiceCardPricingPreview key="4" />,
       ],
       'About Section': [
-        <AboutSectionPreview key="1" />,
-        <AboutSectionPreview key="2" />,
-        <AboutSectionPreview key="3" />,
-        <AboutSectionPreview key="4" />,
+        <AboutSectionStoryPreview key="1" />,
+        <AboutSectionTeamPreview key="2" />,
+        <AboutSectionMissionPreview key="3" />,
+        <AboutSectionTimelinePreview key="4" />,
       ],
       'Contact Info': [
-        <ContactInfoPreview key="1" />,
-        <ContactInfoPreview key="2" />,
-        <ContactInfoPreview key="3" />,
-        <ContactInfoPreview key="4" />,
+        <ContactInfoCardPreview key="1" />,
+        <ContactInfoMapPreview key="2" />,
+        <ContactInfoIconsPreview key="3" />,
+        <ContactInfoSocialPreview key="4" />,
       ],
       'Company Stats': [
-        <CompanyStatsPreview key="1" />,
-        <CompanyStatsPreview key="2" />,
-        <CompanyStatsPreview key="3" />,
-        <CompanyStatsPreview key="4" />,
+        <CompanyStatsCounterPreview key="1" />,
+        <CompanyStatsCardsPreview key="2" />,
+        <CompanyStatsAnimatedPreview key="3" />,
+        <CompanyStatsInfographicPreview key="4" />,
       ],
       'FAQ Section': [
-        <FAQSectionPreview key="1" />,
-        <FAQSectionPreview key="2" />,
-        <FAQSectionPreview key="3" />,
-        <FAQSectionPreview key="4" />,
+        <FAQSectionAccordionPreview key="1" />,
+        <FAQSectionCategoryPreview key="2" />,
+        <FAQSectionSearchablePreview key="3" />,
+        <FAQSectionTabbedPreview key="4" />,
       ],
       // Dashboard and Admin Category
       'Dashboard Widget': [
@@ -4632,34 +7380,34 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
         <DashboardWidgetProgressPreview key="4" />,
       ],
       'Data Table': [
-        <DataTablePreview key="1" />,
-        <DataTablePreview key="2" />,
-        <DataTablePreview key="3" />,
-        <DataTablePreview key="4" />,
+        <DataTablePreview1 key="1" />,
+        <DataTablePreview2 key="2" />,
+        <DataTablePreview3 key="3" />,
+        <DataTablePreview4 key="4" />,
       ],
       'Analytics Card': [
-        <AnalyticsCardPreview key="1" />,
-        <AnalyticsCardPreview key="2" />,
-        <AnalyticsCardPreview key="3" />,
-        <AnalyticsCardPreview key="4" />,
+        <AnalyticsCardPreview1 key="1" />,
+        <AnalyticsCardPreview2 key="2" />,
+        <AnalyticsCardPreview3 key="3" />,
+        <AnalyticsCardPreview4 key="4" />,
       ],
       'Status Indicator': [
-        <StatusIndicatorPreview key="1" />,
-        <StatusIndicatorPreview key="2" />,
-        <StatusIndicatorPreview key="3" />,
-        <StatusIndicatorPreview key="4" />,
+        <StatusIndicatorPreview1 key="1" />,
+        <StatusIndicatorPreview2 key="2" />,
+        <StatusIndicatorPreview3 key="3" />,
+        <StatusIndicatorPreview4 key="4" />,
       ],
       'Action Button': [
-        <ActionButtonPreview key="1" />,
-        <ActionButtonPreview key="2" />,
-        <ActionButtonPreview key="3" />,
-        <ActionButtonPreview key="4" />,
+        <ActionButtonPreview1 key="1" />,
+        <ActionButtonPreview2 key="2" />,
+        <ActionButtonPreview3 key="3" />,
+        <ActionButtonPreview4 key="4" />,
       ],
       'Settings Panel': [
-        <SettingsPanelPreview key="1" />,
-        <SettingsPanelPreview key="2" />,
-        <SettingsPanelPreview key="3" />,
-        <SettingsPanelPreview key="4" />,
+        <SettingsPanelPreview1 key="1" />,
+        <SettingsPanelPreview2 key="2" />,
+        <SettingsPanelPreview3 key="3" />,
+        <SettingsPanelPreview4 key="4" />,
       ],
       // Marketing and Promotion Category
       'Call to Action': [
@@ -4669,34 +7417,46 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
         <CallToActionInlinePreview key="4" />,
       ],
       'Promotional Banner': [
-        <PromotionalBannerPreview key="1" />,
-        <PromotionalBannerPreview key="2" />,
-        <PromotionalBannerPreview key="3" />,
-        <PromotionalBannerPreview key="4" />,
+        <PromotionalBannerPreview1 key="1" />,
+        <PromotionalBannerPreview2 key="2" />,
+        <PromotionalBannerPreview3 key="3" />,
+        <PromotionalBannerPreview4 key="4" />,
       ],
       'Feature Highlight': [
-        <FeatureHighlightPreview key="1" />,
-        <FeatureHighlightPreview key="2" />,
-        <FeatureHighlightPreview key="3" />,
-        <FeatureHighlightPreview key="4" />,
+        <FeatureHighlightPreview1 key="1" />,
+        <FeatureHighlightPreview2 key="2" />,
+        <FeatureHighlightPreview3 key="3" />,
+        <FeatureHighlightPreview4 key="4" />,
       ],
       'Newsletter Banner': [
-        <NewsletterBannerPreview key="1" />,
-        <NewsletterBannerPreview key="2" />,
-        <NewsletterBannerPreview key="3" />,
-        <NewsletterBannerPreview key="4" />,
+        <NewsletterBannerPreview1 key="1" />,
+        <NewsletterBannerPreview2 key="2" />,
+        <NewsletterBannerPreview3 key="3" />,
+        <NewsletterBannerPreview4 key="4" />,
       ],
       'Discount Badge': [
-        <DiscountBadgePreview key="1" />,
-        <DiscountBadgePreview key="2" />,
-        <DiscountBadgePreview key="3" />,
-        <DiscountBadgePreview key="4" />,
+        <DiscountBadgePreview1 key="1" />,
+        <DiscountBadgePreview2 key="2" />,
+        <DiscountBadgePreview3 key="3" />,
+        <DiscountBadgePreview4 key="4" />,
       ],
       'Landing Hero': [
-        <LandingHeroPreview key="1" />,
-        <LandingHeroPreview key="2" />,
-        <LandingHeroPreview key="3" />,
-        <LandingHeroPreview key="4" />,
+        <LandingHeroPreview1 key="1" />,
+        <LandingHeroPreview2 key="2" />,
+        <LandingHeroPreview3 key="3" />,
+        <LandingHeroPreview4 key="4" />,
+      ],
+      'Product Showcase': [
+        <ProductShowcase3DCardPreview key="1" />,
+        <ProductShowcaseSplitHeroPreview key="2" />,
+        <ProductShowcase360Preview key="3" />,
+        <ProductShowcaseNeonPreview key="4" />,
+      ],
+      'Testimonial Banner': [
+        <TestimonialBannerWhisperPreview key="1" />,
+        <TestimonialBannerHolographicPreview key="2" />,
+        <TestimonialBannerRoyalPreview key="3" />,
+        <TestimonialBannerExplosivePreview key="4" />,
       ],
     }
 
@@ -4852,7 +7612,7 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
                   )}
 
                   {/* Implementation Notes */}
-                  {variation.metadata.implementationNotes.length > 0 && (
+                  {/* {variation.metadata.implementationNotes.length > 0 && (
                     <div className="text-xs">
                       <p className="font-medium text-foreground mb-1">Implementation Notes:</p>
                       <ul className="list-disc list-inside space-y-0.5 text-muted-foreground">
@@ -4861,7 +7621,7 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
                         ))}
                       </ul>
                     </div>
-                  )}
+                  )} */}
 
                   {/* Action Buttons */}
                   <div className="flex items-center justify-between pt-2 border-t border-border/50">
@@ -4898,6 +7658,52 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
             )
           })}
         </div>
+      </div>
+    )
+  }
+
+  // Category-specific preview components mapping
+  const getCategoryPreview = () => {
+    switch (selectedItem) {
+      case 'Media & Gallery':
+        return <MediaGalleryPreview />
+      case 'News & Content':
+        return <NewsContentPreview />
+      case 'E-commerce':
+        return <EcommercePreview />
+      case 'Social & Engagement':
+        return <SocialEngagementPreview />
+      case 'Business & Corporate':
+        return <BusinessCorporatePreview />
+      case 'Marketing & Promotion':
+        return <MarketingPromotionsPreview />
+      default:
+        return null
+    }
+  }
+
+  const categoryPreview = getCategoryPreview()
+  
+  if (categoryPreview) {
+    return (
+      <div className="relative h-full w-full">
+        <button
+          onClick={toggleTheme}
+          className="absolute top-6 right-6 z-50 flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground shadow-lg"
+        >
+          {theme === "dark" ? (
+            <>
+              <Sun className="h-4 w-4" />
+              Light
+            </>
+          ) : (
+            <>
+              <Moon className="h-4 w-4" />
+              Dark
+            </>
+          )}
+        </button>
+        {categoryPreview}
       </div>
     )
   }
@@ -4969,5 +7775,3 @@ export function TemplatePreview({ selectedItem }: TemplatePreviewProps) {
     </div>
   )
 }
-
-
